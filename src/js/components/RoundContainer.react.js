@@ -1,8 +1,8 @@
 import React from 'react';
 import Radium from 'radium';
 import AppStore from '../stores/AppStore';
-import connectToStores from '../utils/connectToStores';
-import checkShouldRedirect from '../utils/checkShouldRedirect';
+import connectToStores from '../mixins/connectToStores';
+import checkShouldRedirect from '../mixins/checkShouldRedirect';
 import { Link } from 'react-router';
 
 function getState(props) {
