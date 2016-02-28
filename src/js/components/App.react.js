@@ -26,6 +26,10 @@ var App = Radium(React.createClass({
         {this.props.children ? React.cloneElement(this.props.children) : null}
 
         <Link to="/round/1/2">round/1/2</Link><br/>
+        <Link to="/round/1/e">round/1/e</Link><br/>
+        <Link to="/round/3/25">round/3/25</Link><br/>
+        <Link to="/round/1/25">round/1/25</Link><br/>
+        <Link to="/round/2/2">round/2/2</Link><br/>
         <Link to="/round/1/3">round/1/3</Link><br/>
         <Link to="/round/3/3">round/3/3</Link><br/>
         <Link to="/round/3/example">round/3/example</Link><br/>

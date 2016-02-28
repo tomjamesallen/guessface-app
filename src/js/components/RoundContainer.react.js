@@ -33,11 +33,14 @@ var RoundContainer = Radium(React.createClass({
    */
   render() {
 
+    if (!this.state.dataReady) return <div />;
+
     // console.log('render round container', this.props.params, this.state);
 
     return (
       <div>
         {this.props.children ? React.cloneElement(this.props.children, {state: this.state}) : null}
+        {this.state.round.title}
       </div>
     );
   }

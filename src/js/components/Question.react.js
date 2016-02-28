@@ -8,22 +8,21 @@ import CheckShouldRedirect from '../mixins/CheckShouldRedirect';
 
 function getState(props) {
 
-  // const round = AppStore.getRound(props)
-  const question = {};
+  const round = AppStore.getRound(props.roundId);
+  const question = AppStore.getQuestion(props.roundId, props.questionId);
+  const dataReady = AppStore.isDataReady();
 
   return {
-    question
+    round,
+    question,
+    dataReady
   };
 };
 
-function shouldRedirect(props, componentThis, callLater) {
-
-  // console.log(componentThis);
-
+function shouldRedirect(props, state) {
   // If we don't have the round then redirect to the home page.
-  // if (!componentThis.state.round) return '/';
-
-  // setTimeout(callLater, 1000);
+  if (state.dataReady && !state.round) return '/';
+  if (state.dataReady && !state.question) return `/round/${props.roundId}`;
 };
 
 
@@ -35,7 +34,7 @@ function transitionHook(call) {
 var Question = Radium(React.createClass({
 
   mixins: [
-  ConnectToStores([AppStore], getState),
+    ConnectToStores([AppStore], getState),
     CheckShouldRedirect(shouldRedirect),
     componentWidthMixin,
     TransitionHook(transitionHook)
@@ -49,7 +48,9 @@ var Question = Radium(React.createClass({
 
     return (
       <div>
-        Round: {this.props.roundId} | Question: {this.props.questionId}
+        Round: {this.state.round.title} | Question: {this.props.questionId}
+        <br/>
+        {this.state.question.extra ? this.state.question.extra : null}
       </div>
     );
   }

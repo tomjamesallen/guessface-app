@@ -53,30 +53,51 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   /**
    * Get the meta data for a given round.
-   * @param  {string or int} roundId human readible question (starts at 1).
+   * @param  {string or int} roundId human readible roundId (starts at 1).
+   * @param  {bool}          returnFullData whether to returnt the full data for
+   *                                        the round. 
    * @return {object}        returns the round meta data.
    */
-  getRound(roundId) {
-    console.log('get round');
+  getRound(roundId, returnFullData) {
     if (!state.dataReady) return;
 
     roundId = parseInt(roundId, 10) - 1;
     const round = state.rounds[roundId];
 
-    console.log('round', round);
-
     if (typeof round === 'undefined') return;
-    
 
-    return {}
+    if (returnFullData) {
+      round.roundId = roundId;
+      return round;
+    }
+    
+    return {
+      title: round.title,
+      roundId: round.roundId
+    };
   },
 
+  /**
+   * [getQuestion description]
+   * @param  {string or int} roundId human readible roundId (starts at 1).
+   * @param  {string or int} questionId human readible questionId (starts at 1).
+   * @return {object}        returns the question data.
+   */
   getQuestion(roundId, questionId) {
-    if (!state.dataReady) {
-      return null;
-    }
+    console.log('getQuestion', roundId, questionId);
+    const round = this.getRound(roundId, true);
+    if (!round) return;
 
-    return {}
+    // Handle example question.
+    if (questionId === 'e') {
+      if (typeof round.exampleData === 'undefined') return;
+      else return round.exampleData;
+    }
+    else {
+      questionId = parseInt(questionId, 10) - 1;
+      if (typeof round.questionsData[questionId] === 'undefined') return;
+      else return round.questionsData[questionId];
+    }
   },
 
   isDataReady() {
