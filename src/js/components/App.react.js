@@ -11,6 +11,10 @@ var App = Radium(React.createClass({
     children: PropTypes.object
   },
 
+  componentDidMount() {
+    AppActions.initialDataFetch();
+  },
+
   /**
    * Render the App component.
    * @return {object}

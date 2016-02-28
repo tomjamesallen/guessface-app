@@ -9,6 +9,7 @@ import jsonAjaxHelper from '../helpers/jsonAjaxHelper';
 
 // Constants.
 import ActionTypes from '../constants/ActionTypes';
+import Api from '../constants/Api';
 const CHANGE_EVENT = 'change';
 
 // Get ENV.
@@ -16,12 +17,25 @@ const ENV = process.env.NODE_ENV;
 
 function getInitialState() {
   return {
-    
+    rounds: {},
+    dataReady: false
   }
 };
 
 // Create state var and set to initial state.
 var state = getInitialState();
+
+function initialDataFetch() {
+  jsonAjaxHelper(Api.url, function (data) {
+    parseData(data.data);
+    AppStore.emitChange();
+  });
+};
+
+function parseData(data) {
+  state.rounds = data.rounds;
+  state.dataReady = true;
+};
 
 
 /**
@@ -35,6 +49,38 @@ var AppStore = assign({}, EventEmitter.prototype, {
    */
   getState() {
     return state;
+  },
+
+  /**
+   * Get the meta data for a given round.
+   * @param  {string or int} roundId human readible question (starts at 1).
+   * @return {object}        returns the round meta data.
+   */
+  getRound(roundId) {
+    console.log('get round');
+    if (!state.dataReady) return;
+
+    roundId = parseInt(roundId, 10) - 1;
+    const round = state.rounds[roundId];
+
+    console.log('round', round);
+
+    if (typeof round === 'undefined') return;
+    
+
+    return {}
+  },
+
+  getQuestion(roundId, questionId) {
+    if (!state.dataReady) {
+      return null;
+    }
+
+    return {}
+  },
+
+  isDataReady() {
+    return state.dataReady;
   },
 
   /**
@@ -64,8 +110,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
  */
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
-    case ActionTypes.EXAMPLE_ACTION:
-      console.log('Action Fired:', ActionTypes.EXAMPLE_ACTION);
+    case ActionTypes.INITIAL_DATA_FETCH:
+      initialDataFetch();
       
       break;      
 

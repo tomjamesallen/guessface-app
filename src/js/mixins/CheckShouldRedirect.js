@@ -2,12 +2,18 @@ import React from 'react';
 
 export default function (shouldRedirect) {
 
-  function check(props, componentThis) {
-    const shouldRedirectReturn = shouldRedirect(props, componentThis);
-    if (typeof shouldRedirectReturn === 'string') {
-      componentThis.context.history.pushState(null, shouldRedirectReturn);
+  function CallLater(history) {
+    return function (path) {
+      history.pushState(null, path);
     }
-  }
+  };
+
+  function check(history, props, state) {
+    const shouldRedirectReturn = shouldRedirect(props, state, CallLater(history));
+    if (typeof shouldRedirectReturn === 'string') {
+      history.pushState(null, shouldRedirectReturn);
+    }
+  };
 
   return {
     contextTypes: {
@@ -15,11 +21,11 @@ export default function (shouldRedirect) {
     },
 
     componentWillMount() {
-      check(this.props, this);
+      check(this.context.history, this.props, this.state);
     },
 
-    componentWillReceiveProps(props) {
-      check(props, this);
+    componentWillUpdate(nextProps, nextState) {
+      check(this.context.history, nextProps, nextState);
     },
   }
 };

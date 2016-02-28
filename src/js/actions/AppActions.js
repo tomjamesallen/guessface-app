@@ -7,9 +7,9 @@ import ActionTypes from '../constants/ActionTypes';
 
 export default {
 
-  exampleAction() {
+  initialDataFetch() {
     AppDispatcher.dispatch({
-      actionType: ActionTypes.EXAMPLE_ACTION
+      actionType: ActionTypes.INITIAL_DATA_FETCH
     });
   }
 

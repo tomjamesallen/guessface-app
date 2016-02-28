@@ -6,20 +6,18 @@ import CheckShouldRedirect from '../mixins/CheckShouldRedirect';
 
 function getState(props) {
 
-  // const round = AppStore.getRound(props)
-  const round = {};
+  const round = AppStore.getRound(props.params.roundId);
+  const dataReady = AppStore.isDataReady();
 
   return {
-    round
+    round,
+    dataReady
   };
 };
 
-function shouldRedirect(props, componentThis) {
-
+function shouldRedirect(props, state) {
   // If we don't have the round then redirect to the home page.
-  if (!componentThis.state.round) return '/';
-
-  return false;
+  if (state.dataReady && !state.round) return '/';
 };
 
 var RoundContainer = Radium(React.createClass({
