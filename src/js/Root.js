@@ -22,7 +22,8 @@ export default class Root extends Component {
 
           <Route path="round/:roundId" component={RoundContainer}>
             <IndexRoute component={RoundHome}/>
-            <Route path="example" />
+            <Route path="example"/>
+            <Route path=":questionId"/>
           </Route>
         </Route>
       </Router>
