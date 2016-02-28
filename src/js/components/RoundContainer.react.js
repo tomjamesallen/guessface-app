@@ -1,9 +1,8 @@
 import React from 'react';
 import Radium from 'radium';
 import AppStore from '../stores/AppStore';
-import connectToStores from '../mixins/connectToStores';
-import checkShouldRedirect from '../mixins/checkShouldRedirect';
-import { Link } from 'react-router';
+import ConnectToStores from '../mixins/ConnectToStores';
+import CheckShouldRedirect from '../mixins/CheckShouldRedirect';
 
 function getState(props) {
 
@@ -23,9 +22,12 @@ function shouldRedirect(props, componentThis) {
   return false;
 };
 
-export default Radium(React.createClass({
+var RoundContainer = Radium(React.createClass({
 
-  mixins: [ connectToStores([AppStore], getState), checkShouldRedirect(shouldRedirect) ],
+  mixins: [
+    ConnectToStores([AppStore], getState),
+    CheckShouldRedirect(shouldRedirect)
+  ],
 
   /**
    * Render the App component.
@@ -33,18 +35,15 @@ export default Radium(React.createClass({
    */
   render() {
 
-    console.log('render round container', this.props.params, this.state);
+    // console.log('render round container', this.props.params, this.state);
 
     return (
       <div>
-        <h2>Round</h2>
         {this.props.children ? React.cloneElement(this.props.children, {state: this.state}) : null}
-        <Link to="/round/1/2">round/1/2</Link><br/>
-        <Link to="/round/1/3">round/1/3</Link><br/>
-        <Link to="/round/3/3">round/3/3</Link><br/>
-        <Link to="">Index</Link>
       </div>
     );
   }
 
 }));
+
+export default RoundContainer;

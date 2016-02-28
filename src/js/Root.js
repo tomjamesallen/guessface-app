@@ -6,6 +6,8 @@ import About from './components/About.react';
 import HomeScreen from './components/HomeScreen.react';
 import RoundContainer from './components/RoundContainer.react';
 import RoundHome from './components/RoundHome.react';
+import QuestionContainer from './components/QuestionContainer.react';
+import ExampleContainer from './components/ExampleContainer.react'
 
 export default class Root extends Component {
   static propTypes = {
@@ -22,8 +24,8 @@ export default class Root extends Component {
 
           <Route path="round/:roundId" component={RoundContainer}>
             <IndexRoute component={RoundHome}/>
-            <Route path="example"/>
-            <Route path=":questionId"/>
+            <Route path="example" component={ExampleContainer}/>
+            <Route path=":questionId" component={QuestionContainer}/>
           </Route>
         </Route>
       </Router>

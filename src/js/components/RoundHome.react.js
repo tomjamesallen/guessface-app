@@ -1,7 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 
-export default Radium(React.createClass({
+var RoundHome = Radium(React.createClass({
 
   /**
    * Render the App component.
@@ -17,3 +17,5 @@ export default Radium(React.createClass({
   }
 
 }));
+
+export default RoundHome;

@@ -9,11 +9,17 @@ export default Radium(React.createClass({
 
   mixins: [componentWidthMixin],
 
+  contextTypes: {
+    history: React.PropTypes.object.isRequired
+  },
+
   /**
    * Render the App component.
    * @return {object}
    */
   render() {
+
+    // console.log('re-render reactiveComponent', this.props, this);
 
     var componentBreakpoint = 400;
     var componentSize = this.state.componentWidth;
