@@ -12,26 +12,22 @@ import ExampleContainer from './components/ExampleContainer.react';
 import AppStore from './stores/AppStore';
 import RouteValidator from './utils/RouteValidator';
 
-var rules = [
+var routeValidator = RouteValidator([
   function (next, replace) {
     const params = next.params;
-    var state = {};
-
     if (params.roundId) {
       if (!AppStore.getRound(params.roundId)) {
         replace('/');
       }
       else {
-        
+        if (params.questionId && 
+            !AppStore.getQuestion(params.roundId, params.questionId)) {
+          replace(`/round/${params.roundId}`);
+        }
       }
     }
-
-    // if (state.dataReady && !state.round) return '/';
-    // if (state.dataReady && !state.question) return `/round/${props.roundId}`;
-
   },
-];
-var routeValidation = RouteValidator(rules);
+]);
 
 export default class Root extends Component {
   static propTypes = {
@@ -46,10 +42,10 @@ export default class Root extends Component {
           <IndexRoute component={HomeScreen}/>
           <Route name='about' path='/about' component={About} />
 
-          <Route path="round/:roundId" component={RoundContainer} onEnter={routeValidation.validator}>
+          <Route path="round/:roundId" component={RoundContainer} onEnter={routeValidator.validator}>
             <IndexRoute component={RoundHome}/>
-            <Route path="example" component={ExampleContainer} onEnter={routeValidation.validator}/>
-            <Route path=":questionId" component={QuestionContainer} onEnter={routeValidation.validator}/>
+            <Route path="example" component={ExampleContainer} onEnter={routeValidator.validator}/>
+            <Route path=":questionId" component={QuestionContainer} onEnter={routeValidator.validator}/>
           </Route>
         </Route>
       </Router>
