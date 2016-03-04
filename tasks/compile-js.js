@@ -9,6 +9,7 @@ var streamify = require('gulp-streamify');
 var connect = require('gulp-connect');
 var envify = require('envify/custom');
 var gulpif = require('gulp-if');
+var size = require('gulp-size');
 
 gulp.task('compile:js', function () {
   return scripts(false);
@@ -36,7 +37,7 @@ function scripts(watch) {
   }));
 
   rebundle = function() {
-    console.log('Rebundling JS');
+    console.log('rebundling');
     var stream = bundler.bundle();
     stream.on('error', function (err) {
       console.log(err);
@@ -47,7 +48,8 @@ function scripts(watch) {
       .pipe(source(config.outputFileName))
       .pipe(streamify(gulpif(ENV === 'production', uglify())))
       .pipe(gulp.dest(config.outputDir))
-      .pipe(connect.reload());
+      .pipe(connect.reload())
+      .pipe(size());
       
     return stream;
   };
