@@ -26,8 +26,8 @@ var Logo = Radium(React.createClass({
       width: '0.5em',
       top: 0,
       height: '100%',
-      borderTop: `0.2em solid ${ThemeColors.primary}`,
-      borderBottom: `0.2em solid ${ThemeColors.primary}`,
+      borderTop: `3px solid ${ThemeColors.primary}`,
+      borderBottom: `3px solid ${ThemeColors.primary}`,
       zIndex: '3'
     };
 
@@ -62,14 +62,14 @@ var Logo = Radium(React.createClass({
         borderShared,
         {
           left: 0,
-          borderLeft: `0.25em solid ${ThemeColors.primary}`,
+          borderLeft: `4px solid ${ThemeColors.primary}`,
         }
       ],
       __rightBorder: [
         borderShared,
         {
           right: 0,
-          borderRight: `0.25em solid ${ThemeColors.primary}`,
+          borderRight: `4px solid ${ThemeColors.primary}`,
         }
       ],
       __background: [
@@ -77,7 +77,7 @@ var Logo = Radium(React.createClass({
           position: 'absolute',
           display: 'block',
           width: '100%',
-          height: '0.2em',
+          height: '3px',
           transition: `all ${AnimationConstants.easing} ${AnimationConstants.short}`,
           left: 0,
           bottom: 0,

@@ -50,7 +50,13 @@ var App = Radium(React.createClass({
 
     return (
       <div style={styles.base}>
-        <Logo style={{width: '50%'}}/>
+        <Logo style={{
+          width: '300px',
+          position: 'absolute',
+          right: SizingVars.unit * 2.5
+        }}/>
+
+        {this.props.children ? React.cloneElement(this.props.children) : null}
 
         <Button style={buttonTestStyles} href="/round/1/3">Link</Button>
         <Button style={buttonTestStyles} onClick={onClick}>Button</Button>
@@ -60,8 +66,6 @@ var App = Radium(React.createClass({
           <Button style={buttonTestStyles} href="/round/1/3">prev</Button>
           <Button style={buttonTestStyles} href="/round/1/3">next</Button>
         </div>
-
-        {this.props.children ? React.cloneElement(this.props.children) : null}
 
         <Link to="/round/1/2">round/1/2</Link><br/>
         <Link to="/round/1/e">round/1/e</Link><br/>

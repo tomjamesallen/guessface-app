@@ -29,6 +29,15 @@ var routeValidator = RouteValidator([
   },
 ]);
 
+var onEnter = function (next, replace) {
+  // routeValidator(next, replace);
+  console.log(next);
+};
+
+function runCallback() {
+  console.log('callback', arguments);
+}
+
 export default class Root extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired
@@ -40,7 +49,7 @@ export default class Root extends Component {
       <Router history={history}>
         <Route name='home' path='/' component={App}>
           <IndexRoute component={HomeScreen}/>
-          <Route name='about' path='/about' component={About} />
+          <Route name='about' path='/about' component={About}/>
 
           <Route path="round/:roundId" component={RoundContainer} onEnter={routeValidator.validator}>
             <IndexRoute component={RoundHome}/>

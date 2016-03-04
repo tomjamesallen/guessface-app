@@ -1,6 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import AppStore from '../stores/AppStore';
+import LoadingScreen from './LoadingScreen.react';
 import componentWidthMixin from 'react-component-width-mixin';
 import TransitionHook from '../mixins/TransitionHook';
 import ConnectToStores from '../mixins/ConnectToStores';
@@ -37,7 +38,7 @@ var Question = Radium(React.createClass({
    */
   render() {
 
-    if (!this.state.dataReady) return <div>Loading</div>;
+    if (!this.state.dataReady) return <LoadingScreen/>;
     if (!this.state.question) return <div>Question not found</div>;
 
     return (

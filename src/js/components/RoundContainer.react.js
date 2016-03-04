@@ -1,6 +1,7 @@
 import React from 'react';
 import Radium from 'radium';
 import AppStore from '../stores/AppStore';
+import LoadingScreen from './LoadingScreen.react';
 import ConnectToStores from '../mixins/ConnectToStores';
 
 function getState(props) {
@@ -26,7 +27,7 @@ var RoundContainer = Radium(React.createClass({
    */
   render() {
 
-    if (!this.state.dataReady) return <div>Loading</div>;
+    if (!this.state.dataReady) return <LoadingScreen/>;
     if (!this.state.round) return <div>Round not found</div>;
 
     return (
