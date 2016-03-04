@@ -53,7 +53,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   /**
    * Get the meta data for a given round.
-   * @param  {string or int} roundId human readible roundId (starts at 1).
+   * @param  {string or int} roundId.
    * @param  {bool}          returnFullData whether to returnt the full data for
    *                                        the round. 
    * @return {object}        returns the round meta data.
@@ -61,7 +61,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
   getRound(roundId, returnFullData) {
     if (!state.dataReady) return;
 
-    roundId = parseInt(roundId, 10) - 1;
+    roundId = parseInt(roundId, 10);
     const round = state.rounds[roundId];
 
     if (typeof round === 'undefined') return;
@@ -79,8 +79,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   /**
    * [getQuestion description]
-   * @param  {string or int} roundId human readible roundId (starts at 1).
-   * @param  {string or int} questionId human readible questionId (starts at 1).
+   * @param  {string or int} roundId.
+   * @param  {string or int} questionId.
    * @return {object}        returns the question data.
    */
   getQuestion(roundId, questionId) {
@@ -93,7 +93,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
       else return round.exampleData;
     }
     else {
-      questionId = parseInt(questionId, 10) - 1;
+      questionId = parseInt(questionId, 10);
       if (typeof round.questionsData[questionId] === 'undefined') return;
       else return round.questionsData[questionId];
     }

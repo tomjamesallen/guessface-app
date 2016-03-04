@@ -17,9 +17,7 @@ export default function(stores, getState) {
     },
 
     componentWillReceiveProps(nextProps) {
-      if (!shallowEqual(nextProps, this.props)) {
-        this.setState(getState(nextProps));
-      }
+      this.setState(getState(nextProps));
     },
 
     componentWillUnmount() {

@@ -6,7 +6,9 @@ import ConnectToStores from '../mixins/ConnectToStores';
 
 function getState(props) {
 
-  const round = AppStore.getRound(props.params.roundId);
+  var _roundId = parseInt(props.params.roundId, 10) - 1;
+
+  const round = AppStore.getRound(_roundId);
   const dataReady = AppStore.isDataReady();
 
   return {

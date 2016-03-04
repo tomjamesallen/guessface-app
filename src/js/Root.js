@@ -15,13 +15,17 @@ import RouteValidator from './utils/RouteValidator';
 var routeValidator = RouteValidator([
   function (next, replace) {
     const params = next.params;
+    var _roundId = parseInt(params.roundId, 10) - 1;
+    var _questionId = params.questionId;
+    if (_questionId !== 'e') _questionId = parseFloat(_questionId, 10) - 1;
+
     if (params.roundId) {
-      if (!AppStore.getRound(params.roundId)) {
+      if (!AppStore.getRound(_roundId)) {
         replace('/');
       }
       else {
         if (params.questionId && 
-            !AppStore.getQuestion(params.roundId, params.questionId)) {
+            !AppStore.getQuestion(_roundId, _questionId)) {
           replace(`/round/${params.roundId}`);
         }
       }
