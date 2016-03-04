@@ -1,5 +1,5 @@
-import keyMirror from 'keymirror';
+export default {
 
-export default keyMirror({
-
-});
+  APP_NAME: 'Guessface'
+  
+};
