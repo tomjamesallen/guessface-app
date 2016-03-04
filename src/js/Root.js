@@ -15,11 +15,21 @@ import RouteValidator from './utils/RouteValidator';
 var rules = [
   function (next, replace) {
     const params = next.params;
-    console.log(params);
+    var state = {};
+
+    if (params.roundId) {
+      if (!AppStore.getRound(params.roundId)) {
+        replace('/');
+      }
+      else {
+        
+      }
+    }
+
+    // if (state.dataReady && !state.round) return '/';
+    // if (state.dataReady && !state.question) return `/round/${props.roundId}`;
+
   },
-  // function (next, replace) {
-  //   console.log('rules[1]', next);
-  // }
 ];
 var routeValidation = RouteValidator(rules);
 

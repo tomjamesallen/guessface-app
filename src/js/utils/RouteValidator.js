@@ -1,4 +1,5 @@
 import AppStore from '../stores/AppStore';
+import history from '../history';
 
 export default function (rules) {
   var transitionId = 0,
@@ -10,8 +11,8 @@ export default function (rules) {
     retryCachedTransitions();
   };
 
-  function testRules(next, replace) {
-    rules.forEach(rule => rule(next, replace));
+  function testRules(next) {
+    rules.forEach(rule => rule(next, history.replace));
   };
 
   function retryCachedTransitions() {
@@ -19,7 +20,7 @@ export default function (rules) {
 
     cachedTransitions.forEach(transition => {
       if (transition.transitionId === transitionId) {
-        testRules(transition.next, transition.replace);
+        testRules(transition.next);
       }
     });
 
@@ -29,14 +30,13 @@ export default function (rules) {
   AppStore.addChangeListener(handleStoresChanged);
   
   return {
-    validator(next, replace) {
+    validator(next) {
       transitionId ++;
       const thisTransitionId = transitionId;
       
-      if (dataReady) testRules(next, replace);
+      if (dataReady) testRules(next);
       else cachedTransitions.push({
         next,
-        replace,
         transitionId: thisTransitionId
       });
 
