@@ -84,7 +84,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @return {object}        returns the question data.
    */
   getQuestion(roundId, questionId) {
-    console.log('getQuestion', roundId, questionId);
     const round = this.getRound(roundId, true);
     if (!round) return;
 

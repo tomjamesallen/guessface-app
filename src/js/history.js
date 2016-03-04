@@ -1,12 +1,12 @@
-import { createHistory, createHashHistory } from 'history';
+import { createHistory, createHashHistory, useQueries } from 'history';
 
 // Whether to use hash history.
 const useHash = process.env.NODE_ENV === 'development' ? false : true;
 
 // Create appropriate history.
 const history = useHash ?
-  createHashHistory() :
-  createHistory();
+  useQueries(createHashHistory)() :
+  useQueries(createHistory)();
 
 // Import transitionManager.
 import transitionManager from './transitionManager';

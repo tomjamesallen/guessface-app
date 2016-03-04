@@ -33,6 +33,8 @@ var App = Radium(React.createClass({
         <Link to="/round/1/3">round/1/3</Link><br/>
         <Link to="/round/3/3">round/3/3</Link><br/>
         <Link to="/round/3/example">round/3/example</Link><br/>
+        <Link to="/round/2">round/2</Link><br/>
+        <Link to="/round/3">round/3</Link><br/>
         <Link to="">Index</Link>
       </div>
     );
