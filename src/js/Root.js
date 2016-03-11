@@ -15,28 +15,20 @@ import RouteActions from './actions/RouteActions'
 
 var routeValidator = RouteValidator([
   function(next, replace) {
+    const params = next.params
+
     // Validate round Id.
     const validRoundIds = AppStore.getValidRoundIdParams()
-    if (validRoundIds.indexOf(next.params.roundId) === -1) {
+    if (validRoundIds.indexOf(params.roundId) === -1) {
       replace('/')
       return
     }
 
-    const params = next.params
+    // Validate question Id.
     const _roundId = parseInt(params.roundId, 10) - 1
-    let _questionId = params.questionId
-    if (_questionId !== 'e') _questionId = parseFloat(_questionId, 10) - 1
-
-    if (params.roundId) {
-      if (!AppStore.getRound(_roundId)) {
-        replace('/')
-      }
-      else {
-        if (params.questionId &&
-            !AppStore.getQuestion(_roundId, _questionId)) {
-          replace(AppStore.getRoundPath(_roundId) || {pathname: '/'})
-        }
-      }
+    const validQuestionIds = AppStore.getValidQuestionIdParamsForRound(_roundId)
+    if (validQuestionIds.indexOf(params.questionId) === -1) {
+      replace(AppStore.getRoundPath(_roundId) || {pathname: '/'})
     }
   }
 ])

@@ -133,7 +133,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
   },
 
   getValidRoundIdParams() {
-    var roundIds = []
+    let roundIds = []
     if (state.rounds) {
       state.rounds.forEach(function(round) {
         roundIds.push(String(round.roundId + 1))
@@ -143,13 +143,17 @@ var AppStore = assign({}, EventEmitter.prototype, {
   },
 
   getValidQuestionIdParamsForRound(roundId) {
-    // var roundIds = [];
-    // if (state.rounds) {
-    //   state.rounds.forEach(function (round) {
-    //     roundIds.push(String(round.roundId));
-    //   });
-    // }
-    // return roundIds;
+    let questionIds = []
+    const round = this.getRound(roundId, true)
+    if (round && round.questionsData) {
+      round.questionsData.forEach(function(question) {
+        questionIds.push(String(question.questionId + 1))
+      })
+    }
+    if (round && round.exampleData) {
+      questionIds.push('e')
+    }
+    return questionIds
   },
 
   isDataReady() {
