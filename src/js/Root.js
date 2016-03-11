@@ -36,12 +36,12 @@ var routeValidator = RouteValidator([
 export default class Root extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired
-  };
+  }
 
   checkState() {
     const { location, params } = this.state
     RouteActions.onRouteUpdated(location, params)
-  };
+  }
 
   render() {
     const { history } = this.props
