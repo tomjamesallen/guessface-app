@@ -1,0 +1,18 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": 2,
+    "eqeqeq": "off",
+    "quotes": ["error", "single"],
+    "no-trailing-spaces": 2
+  }
+}

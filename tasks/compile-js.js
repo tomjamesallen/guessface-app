@@ -10,22 +10,27 @@ var connect = require('gulp-connect');
 var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var size = require('gulp-size');
-var jshint = require('gulp-jshint');
-var stylish = require('jshint-stylish');
+var eslint = require('gulp-eslint');
+var runSequence = require('run-sequence');
 
 gulp.task('compile:jshint', function () {
   return gulp.src(config.toWatch)
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish));
+    .pipe(eslint())
+    .pipe(eslint.format());;
 });
 
-gulp.task('watch:jshint', ['compile:jshint'], function () {
+gulp.task('watch:jshint', function () {
   return gulp.watch(config.toWatch)
     .on('change', function (file) {
+      console.log(`Hinting: ${file.path}`);
       return gulp.src(file.path)
-        .pipe(jshint())
-        .pipe(jshint.reporter(stylish));
+        .pipe(eslint())
+        .pipe(eslint.format())
     })
+});
+
+gulp.task('compile:watch:jshint', function (callback) {
+  runSequence('compile:jshint', 'watch:jshint', callback);
 });
 
 gulp.task('compile:js', function () {
@@ -55,7 +60,6 @@ function scripts(watch) {
 
   rebundle = function() {
     console.log('rebundling');
-    jshint();
     var stream = bundler.bundle();
     stream.on('error', function (err) {
       console.log(err);
