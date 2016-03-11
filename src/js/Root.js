@@ -22,12 +22,15 @@ var routeValidator = RouteValidator([
 
     if (params.roundId) {
       if (!AppStore.getRound(_roundId)) {
-        replace('/');
+        replace({
+          pathname: '/',
+          query: next.location.query
+        });
       }
       else {
         if (params.questionId && 
-            !AppStore.getQuestion(_roundId, _questionId)) {
-          replace(`/round/${params.roundId}`);
+            !AppStore.getQuestion(_roundId, _questionId)) {          
+          replace(AppStore.getRoundPath(_roundId) || {pathname: '/'});
         }
       }
     }

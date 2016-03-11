@@ -37,15 +37,18 @@ var RoundContainer = Radium(React.createClass({
     var styles = {
       base: {
         height: '100%',
-        width: '100%',
-        paddingTop: rem(SizingVars.unit*5),
-        paddingBottom: rem(SizingVars.unit*5)
+        width: '100%'
+      },
+      roundLabel: {
+        position: 'absolute',
+        top: rem(SizingVars.unit*1.5),
+        right: rem(SizingVars.unit*1.5)
       }
     };
 
     return (
       <div className={this.constructor.displayName} style={styles.base}>
-        {this.state.round.title}
+        <div style={styles.roundLabel}>{this.state.round.title}</div>
         {this.props.children ? React.cloneElement(this.props.children, {state: this.state}) : null}
       </div>
     );

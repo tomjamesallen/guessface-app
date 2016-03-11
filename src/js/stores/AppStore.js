@@ -70,6 +70,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     if (typeof round === 'undefined') return;
 
     round.roundLength = round.questionsData.length;
+    const hasExample = typeof round.exampleData === 'object';
 
     if (returnFullData) {
       round.roundId = roundId;
@@ -80,7 +81,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
       title: round.title,
       roundId: round.roundId,
       roundLength: round.roundLength,
-      description: round.description || null
+      description: round.description || null,
+      hasExample
     };
   },
 
@@ -104,6 +106,32 @@ var AppStore = assign({}, EventEmitter.prototype, {
       if (typeof round.questionsData[questionId] === 'undefined') return;
       else return round.questionsData[questionId];
     }
+  },
+
+  getRoundPath(roundId) {
+    const round = this.getRound(roundId);
+    if (!round) return;
+    const route = RouteStore.getRoute();
+
+    return {
+      pathname: `/round/${round.roundId + 1}`,
+      query: route.location.query
+    };
+  },
+
+  getQuestionPath(roundId, questionId) {
+    const question = this.getQuestion(roundId, questionId);
+    if (!question) return;
+    const route = RouteStore.getRoute();
+
+    var pathRoundId = question.roundData.roundId + 1;
+    var pathQuestionId = question.questionId;
+    if (typeof pathQuestionId === 'number') pathQuestionId ++;
+
+    return {
+      pathname: `/round/${pathRoundId}/${pathQuestionId}`,
+      query: route.location.query
+    };
   },
 
   isDataReady() {

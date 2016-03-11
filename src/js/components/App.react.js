@@ -42,7 +42,10 @@ var App = Radium(React.createClass({
         height: '100%',
         overflow: 'hidden',
         border: `${rem(SizingVars.unit)} solid ${ThemeColors.secondary}`,
-        padding: rem(SizingVars.unit*1.5),
+        paddingLeft: rem(SizingVars.unit*1.5),
+        paddingRight: rem(SizingVars.unit*1.5),
+        paddingTop: rem(SizingVars.unit*5),
+        paddingBottom: rem(SizingVars.unit*5),
         backgroundColor: ThemeColors.tertiary,
         color: ThemeColors.primary
       },
@@ -53,6 +56,7 @@ var App = Radium(React.createClass({
         <Logo style={{
           width: '300px',
           position: 'absolute',
+          top: rem(SizingVars.unit*1.5),
           left: rem(SizingVars.unit*1.5)
         }}/>
 

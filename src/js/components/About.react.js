@@ -47,14 +47,15 @@ export default Radium(React.createClass({
         <Link to="/round/1/2">round/1/2</Link><br/>
         <Link to="/round/1/e">round/1/e</Link><br/>
         <Link to="/round/3/25">round/3/25</Link><br/>
-        <Link to="/round/1/25">round/1/25</Link><br/>
+        <Link to="/round/1/25?test">round/1/25</Link><br/>
         <Link to="/round/2/2">round/2/2</Link><br/>
         <Link to="/round/1/3">round/1/3</Link><br/>
         <Link to="/round/3/3">round/3/3</Link><br/>
         <Link to="/round/3/example">round/3/example</Link><br/>
         <Link to="/round/2">round/2</Link><br/>
         <Link to="/round/3">round/3</Link><br/>
-        <Link to="">Index</Link>
+        <Link to="">Index</Link><br/>
+        <Link to="/round/1">Test</Link>
       </div>
     );
   }

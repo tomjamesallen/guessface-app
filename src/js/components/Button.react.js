@@ -16,6 +16,21 @@ var noop = function () {};
 
 var Button = Radium(React.createClass({
 
+  propTypes: {
+    size: PropTypes.oneOf(['small', 'med', 'lrg']),
+    onClick: PropTypes.func,
+    query: PropTypes.object,
+    href: PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      size: 'med',
+      onClick: function () {},
+      query: {}
+    }
+  },
+
   /**
    * Render the App component.
    * @return {object}
@@ -35,6 +50,14 @@ var Button = Radium(React.createClass({
       zIndex: '3'
     };
 
+    var fontSizes = {
+      small: SizingVars.type.p,
+      med: SizingVars.type.h3,
+      lrg: SizingVars.type.h2
+    };
+
+    var fontSize = fontSizes[this.props.size];
+
     var styles = {
       base: [
         {
@@ -44,10 +67,10 @@ var Button = Radium(React.createClass({
           border: 'none',
           outline: 'none',
           lineHeight: '1em',
-          padding: '0.15em 0.5em',
+          padding: '0.2em 0.5em',
           textDecoration: 'none',
           color: ThemeColors.primary,
-          fontSize: rem(SizingVars.type.h3)
+          fontSize
         },
         this.props.style
       ],
@@ -104,14 +127,13 @@ var Button = Radium(React.createClass({
       }
     };
 
-    var onClick = noop;
-    if (typeof this.props.onClick === 'function') {
-      onClick = this.props.onClick;
-    }
-
     if (this.props.href) {
       return (
-        <Link style={styles.base} to={this.props.href} className={this.constructor.displayName}>
+        <Link
+          style={styles.base}
+          to={this.props.href}
+          query={this.props.query}
+          className={this.constructor.displayName}>
           <span key="hoverTrigger" style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>
@@ -124,7 +146,10 @@ var Button = Radium(React.createClass({
     }
     else {
       return (
-        <button style={styles.base} onClick={onClick} className={this.constructor.displayName}>
+        <button
+          style={styles.base}
+          onClick={this.props.onClick}
+          className={this.constructor.displayName}>
           <span key="hoverTrigger" style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>

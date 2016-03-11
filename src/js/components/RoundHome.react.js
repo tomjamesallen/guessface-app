@@ -4,6 +4,7 @@ import AppStore from '../stores/AppStore';
 import RouteStore from '../stores/RouteStore';
 import ConnectToStores from '../mixins/ConnectToStores';
 import Type from '../constants/BaseTypeStyles';
+import Button from './Button.react';
 
 function getState() {
   const route = RouteStore.getRoute();
@@ -23,8 +24,6 @@ var RoundHome = Radium(React.createClass({
 
   render() {
 
-    console.log(this.state.round)
-
     var description;
     if (this.state.round.description) {
       description = (
@@ -32,10 +31,21 @@ var RoundHome = Radium(React.createClass({
       );
     }
 
+    var exampleButton;
+    var exampleHref = AppStore.getQuestionPath(this.state.roundId, 'e');
+    var path;
+    var query;
+    if (exampleHref) {
+      path = exampleHref.pathname;
+      query = exampleHref.query;
+      exampleButton = <Button size="small" href={path} query={query}>Example Question</Button>;
+    }
+
     return (
       <div className={this.constructor.displayName}>
         <h2 style={Type.h2}>{this.state.round.title}</h2>
         {description}
+        {exampleButton}
       </div>
     );
   }
