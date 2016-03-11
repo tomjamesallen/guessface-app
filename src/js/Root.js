@@ -39,6 +39,7 @@ export default class Root extends Component {
   }
 
   checkState() {
+    console.log('checkState')
     const { location, params } = this.state
     RouteActions.onRouteUpdated(location, params)
   }
@@ -49,7 +50,7 @@ export default class Root extends Component {
       <Router history={history} onUpdate={this.checkState}>
         <Route name='home' path='/' component={App}>
           <IndexRoute component={HomeScreen}/>
-          <Route name='about' path='/about' component={About}/>
+          <Route name='about' path='about' component={About}/>
           <Redirect from='round' to='/' />
           <Route path='round/:roundId' component={RoundContainer} onEnter={routeValidator.validator}>
             <IndexRoute component={RoundHome}/>

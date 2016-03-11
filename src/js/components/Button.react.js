@@ -20,7 +20,7 @@ var Button = Radium(React.createClass({
     size: PropTypes.oneOf(['small', 'med', 'lrg']),
     onClick: PropTypes.func,
     query: PropTypes.object,
-    href: PropTypes.string
+    to: PropTypes.object
   },
 
   getDefaultProps() {
@@ -127,12 +127,11 @@ var Button = Radium(React.createClass({
       }
     };
 
-    if (this.props.href) {
+    if (this.props.to) {
       return (
         <Link
           style={styles.base}
-          to={this.props.href}
-          query={this.props.query}
+          to={this.props.to}
           className={this.constructor.displayName}>
           <span key="hoverTrigger" style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>

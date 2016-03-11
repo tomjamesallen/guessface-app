@@ -6,7 +6,7 @@ import componentWidthMixin from 'react-component-width-mixin'
 import TransitionHook from '../mixins/TransitionHook'
 import ConnectToStores from '../mixins/ConnectToStores'
 
-// import Button from './Button.react'
+import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
 
 function getState(props) {
@@ -50,11 +50,19 @@ var Question = Radium(React.createClass({
     if (!this.state.dataReady) return <LoadingScreen/>
     if (!this.state.question) return <div>Question not found</div>
 
+    let prevNext
+    if (this.state.questionId === 'e') {
+      prevNext = <Button href='/round/1/1'>start round</Button>
+    }
+    else {
+      prevNext = <PrevNext />
+    }
+
     return (
       <div className={this.constructor.displayName}>
         Round: {this.state.round.title} | Question: {this.state.question.questionId}
         <br/>
-        <PrevNext />
+        {prevNext}
         {this.state.question.extra ? this.state.question.extra : null}
       </div>
     )

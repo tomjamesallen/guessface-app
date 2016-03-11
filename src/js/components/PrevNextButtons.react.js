@@ -22,9 +22,9 @@ function getState(props) {
   return {
     round,
     question,
+    dataReady,
     roundId,
-    questionId,
-    dataReady
+    questionId
   }
 }
 

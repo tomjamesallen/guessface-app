@@ -1,21 +1,22 @@
-import React from 'react';
-import Radium from 'radium';
-import AppStore from '../stores/AppStore';
-import RouteStore from '../stores/RouteStore';
-import ConnectToStores from '../mixins/ConnectToStores';
-import Type from '../constants/BaseTypeStyles';
-import Button from './Button.react';
+import React from 'react'
+import Radium from 'radium'
+import AppStore from '../stores/AppStore'
+import RouteStore from '../stores/RouteStore'
+import ConnectToStores from '../mixins/ConnectToStores'
+import Type from '../constants/BaseTypeStyles'
+import Button from './Button.react'
 
 function getState() {
-  const route = RouteStore.getRoute();
-  var _roundId = parseInt(route.params.roundId, 10) - 1;
-  const round = AppStore.getRound(_roundId);
-  const roundId = round ? round.roundId : null;
+  const route = RouteStore.getRoute()
+  var _roundId = parseInt(route.params.roundId, 10) - 1
+  const round = AppStore.getRound(_roundId)
+  const roundId = round ? round.roundId : null
 
   return {
+    route,
     round,
     roundId
-  };
+  }
 }
 
 var RoundHome = Radium(React.createClass({
@@ -23,22 +24,22 @@ var RoundHome = Radium(React.createClass({
   mixins: [ConnectToStores([AppStore, RouteStore], getState)],
 
   render() {
+    if (!this.state.round) {
+      console.log('no round', this.state.route)
+      return <div/>
+    }
 
-    var description;
+    var description
     if (this.state.round.description) {
       description = (
         <p style={Type.p}>{this.state.round.description}</p>
-      );
+      )
     }
 
-    var exampleButton;
-    var exampleHref = AppStore.getQuestionPath(this.state.roundId, 'e');
-    var path;
-    var query;
-    if (exampleHref) {
-      path = exampleHref.pathname;
-      query = exampleHref.query;
-      exampleButton = <Button size="small" href={path} query={query}>Example Question</Button>;
+    var exampleButton
+    var examplePath = AppStore.getQuestionPath(this.state.roundId, 'e')
+    if (examplePath) {
+      exampleButton = <Button to={examplePath}>example question</Button>
     }
 
     return (
@@ -47,9 +48,9 @@ var RoundHome = Radium(React.createClass({
         {description}
         {exampleButton}
       </div>
-    );
+    )
   }
 
-}));
+}))
 
-export default RoundHome;
+export default RoundHome

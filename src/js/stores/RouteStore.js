@@ -25,10 +25,12 @@ function onRouteUpdated(location, params) {
   state.route = {
     location,
     params
-  };
+  }
 
-  RouteStore.emitChange();
-};
+  // console.log('route updated', state.route)
+
+  RouteStore.emitChange()
+}
 
 /**
  * Create and export the AppAppStore.

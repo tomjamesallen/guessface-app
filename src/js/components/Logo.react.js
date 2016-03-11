@@ -41,7 +41,7 @@ var Logo = Radium(React.createClass({
     };
 
     return (
-      <Link style={styles.base} to="/" className={this.constructor.displayName}>
+      <Link style={styles.base} to={{pathname: '/'}} className={this.constructor.displayName}>
         <span style={styles.intrinsic}>
           <span style={styles.inner}>{AppConstants.APP_NAME}</span>
         </span>
