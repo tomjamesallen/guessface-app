@@ -20,7 +20,12 @@ gulp.task('compile:jshint', function () {
 });
 
 gulp.task('watch:jshint', ['compile:jshint'], function () {
-  return gulp.watch(config.toWatch, ['compile:jshint']);
+  return gulp.watch(config.toWatch)
+    .on('change', function (file) {
+      return gulp.src(file.path)
+        .pipe(jshint())
+        .pipe(jshint.reporter(stylish));
+    })
 });
 
 gulp.task('compile:js', function () {
