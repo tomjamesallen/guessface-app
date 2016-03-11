@@ -10,6 +10,18 @@ var connect = require('gulp-connect');
 var envify = require('envify/custom');
 var gulpif = require('gulp-if');
 var size = require('gulp-size');
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
+
+gulp.task('compile:jshint', function () {
+  return gulp.src(config.toWatch)
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+});
+
+gulp.task('watch:jshint', ['compile:jshint'], function () {
+  return gulp.watch(config.toWatch, ['compile:jshint']);
+});
 
 gulp.task('compile:js', function () {
   return scripts(false);
@@ -38,6 +50,7 @@ function scripts(watch) {
 
   rebundle = function() {
     console.log('rebundling');
+    jshint();
     var stream = bundler.bundle();
     stream.on('error', function (err) {
       console.log(err);

@@ -41,7 +41,7 @@ gulp.task('clean', function () {
 });
 
 // Compile static assets.
-gulp.task('compile-assets', ['compile:js', 'compile:html', 'compile:public', 'compile:scss']);
+gulp.task('compile-assets', ['compile:jshint', 'compile:js', 'compile:html', 'compile:public', 'compile:scss']);
 
 // Build tasks.
 gulp.task('build:development', function (callback) {
@@ -55,7 +55,7 @@ gulp.task('build:production', function (callback) {
 gulp.task('build', ['build:production']);
 
 // Watch task (will also do initial build).
-gulp.task('watch', ['watch:js', 'watch:html', 'watch:public', 'watch:scss']);
+gulp.task('watch', ['watch:jshint', 'watch:js', 'watch:html', 'watch:public', 'watch:scss']);
 
 // Fake live environement.
 gulp.task('faux-production', function(callback) {
