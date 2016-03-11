@@ -13,7 +13,7 @@ function getState(props) {
 
   var _roundId = parseInt(props.roundId, 10) - 1;
   var _questionId = props.questionId;
-  if (_questionId !== 'e') _questionId = parseFloat(_questionId, 10) - 1;
+  if (_questionId !== 'e') _questionId = parseInt(_questionId, 10) - 1;
 
   const round = AppStore.getRound(_roundId);
   const question = AppStore.getQuestion(_roundId, _questionId);
@@ -54,7 +54,7 @@ var Question = Radium(React.createClass({
 
     return (
       <div className={this.constructor.displayName}>
-        Round: {this.state.round.title} | Question: {this.props.questionId}
+        Round: {this.state.round.title} | Question: {this.state.question.questionId}
         <br/>
         <PrevNext />
         {this.state.question.extra ? this.state.question.extra : null}

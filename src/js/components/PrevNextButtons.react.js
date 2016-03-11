@@ -73,10 +73,10 @@ var PrevNextButtons = Radium(React.createClass({
     ];
 
     if (this.state.questionId === 'e' && AppStore.getQuestion(this.state.roundId, 0)) {
-      nextQuestionPath = `/round/${this.state.roundId+1}/1`;
+      nextQuestionPath = AppStore.getQuestionPath(this.state.roundId, 0).pathname;
     }
     else if (AppStore.getQuestion(this.state.roundId, this.state.questionId + 1)) {
-      nextQuestionPath = `/round/${this.state.roundId+1}/${this.state.questionId + 2}`;
+      nextQuestionPath = AppStore.getQuestionPath(this.state.roundId, this.state.questionId + 1).pathname;
     }
 
     if (nextQuestionPath) {

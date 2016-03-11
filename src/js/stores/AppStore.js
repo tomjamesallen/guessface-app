@@ -134,6 +134,26 @@ var AppStore = assign({}, EventEmitter.prototype, {
     };
   },
 
+  getRoundIdsAsStrings() {
+    var roundIds = [];
+    if (state.rounds) {
+      state.rounds.forEach(function (round) {
+        roundIds.push(String(round.roundId));
+      });
+    }
+    return roundIds;
+  },
+
+  getRoundQuestionIdsAsStrings(roundId) {
+    // var roundIds = [];
+    // if (state.rounds) {
+    //   state.rounds.forEach(function (round) {
+    //     roundIds.push(String(round.roundId));
+    //   });
+    // }
+    // return roundIds;
+  },
+
   isDataReady() {
     return state.dataReady;
   },

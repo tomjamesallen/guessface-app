@@ -15,6 +15,15 @@ import RouteActions from './actions/RouteActions';
 
 var routeValidator = RouteValidator([
   function (next, replace) {
+
+    // Validate round Id.
+    var validRoundIds = AppStore.getRoundIdsAsStrings();
+    if (validRoundIds.indexOf(next.params.roundId) === -1) {
+      replace('/');
+      return;
+    }
+    var validQuestionIds;
+
     const params = next.params;
     var _roundId = parseInt(params.roundId, 10) - 1;
     var _questionId = params.questionId;
@@ -22,10 +31,7 @@ var routeValidator = RouteValidator([
 
     if (params.roundId) {
       if (!AppStore.getRound(_roundId)) {
-        replace({
-          pathname: '/',
-          query: next.location.query
-        });
+        replace('/');
       }
       else {
         if (params.questionId && 
