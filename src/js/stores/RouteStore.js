@@ -12,7 +12,7 @@ const CHANGE_EVENT = 'change';
 function getInitialState() {
   return {
     route: {}
-  }
+  };
 };
 
 // Create state var and set to initial state.
@@ -74,7 +74,7 @@ RouteStore.dispatchToken = AppDispatcher.register(action => {
     case 'onRouteUpdated':
       onRouteUpdated(action.location, action.params);
       break;
-      
+
     default:
   }
 });

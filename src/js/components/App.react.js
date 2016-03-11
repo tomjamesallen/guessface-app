@@ -21,7 +21,7 @@ var App = Radium(React.createClass({
   getDefaultProps() {
     return {
       initialComponentWidth: 720
-    }
+    };
   },
 
   componentDidMount() {

@@ -15,7 +15,7 @@ function getState() {
   return {
     round,
     roundId
-  }
+  };
 }
 
 var RoundHome = Radium(React.createClass({

@@ -8,7 +8,7 @@ function getRootFontSize() {
     return defaultRootFontSize;
   }
 
-  var root = document.querySelector(":root");
+  var root = document.querySelector(':root');
   var rawRootFontSize = window.getComputedStyle(root).getPropertyValue('font-size');
   return parseInt(rawRootFontSize.split('px')[0]);
 }
@@ -23,7 +23,7 @@ export function Rem(rootFontSize = defaultRootFontSize) {
         unRounded = value/rootFontSize,
         roundingMultiplier = Math.pow(10, decimalPlaces),
         rounded = Math.round(unRounded * roundingMultiplier) / roundingMultiplier;
-    
+
     return `${rounded}rem`;
   };
 }

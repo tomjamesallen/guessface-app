@@ -12,5 +12,5 @@ export default function (transitionHook) {
     componentWillUnmount() {
       transitionManager.unregisterHook(_transitionHookId);
     }
-  }
+  };
 };

@@ -20,9 +20,7 @@ export default Radium(React.createClass({
    */
   render() {
 
-    function onClick() {
-      
-    }
+    function onClick() {}
 
     var buttonTestStyles = {
       marginRight: rem(SizingVars.unit),

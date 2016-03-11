@@ -22,7 +22,7 @@ function getInitialState() {
   return {
     rounds: {},
     dataReady: false
-  }
+  };
 };
 
 // Create state var and set to initial state.
@@ -38,7 +38,7 @@ function initialDataFetch() {
 function parseData(data) {
   state.rounds = data.rounds;
   state.dataReady = true;
-};
+}
 
 
 /**
@@ -58,7 +58,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * Get the meta data for a given round.
    * @param  {string or int} roundId.
    * @param  {bool}          returnFullData whether to returnt the full data for
-   *                                        the round. 
+   *                                        the round.
    * @return {object}        returns the round meta data.
    */
   getRound(roundId, returnFullData) {
@@ -76,7 +76,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
       round.roundId = roundId;
       return round;
     }
-    
+
     return {
       title: round.title,
       roundId: round.roundId,
@@ -186,12 +186,12 @@ var AppStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
 
   AppDispatcher.waitFor([RouteStore.dispatchToken]);
-  
+
   switch(action.actionType) {
     case ActionTypes.INITIAL_DATA_FETCH:
       initialDataFetch();
-      
-      break;      
+
+      break;
 
     default:
   }

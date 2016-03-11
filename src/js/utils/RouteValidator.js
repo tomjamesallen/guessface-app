@@ -28,12 +28,12 @@ export default function (rules) {
   };
 
   AppStore.addChangeListener(handleStoresChanged);
-  
+
   return {
     validator(next) {
       transitionId ++;
       const thisTransitionId = transitionId;
-      
+
       if (dataReady) testRules(next);
       else cachedTransitions.push({
         next,
@@ -42,9 +42,9 @@ export default function (rules) {
 
       return true;
     },
-    
+
     destroy() {
       AppStore.removeChangeListener(handleStoresChanged);
     }
-  }
+  };
 };

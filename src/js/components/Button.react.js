@@ -28,7 +28,7 @@ var Button = Radium(React.createClass({
       size: 'med',
       onClick: function () {},
       query: {}
-    }
+    };
   },
 
   /**

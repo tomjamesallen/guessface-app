@@ -42,9 +42,7 @@ var PrevNextButtons = Radium(React.createClass({
   render() {
 
     // Shared button styles.
-    var sharedStyle = {
-      
-    };
+    var sharedStyle = {};
 
     // Prev button.
     var prevQuestionButton;
@@ -60,16 +58,14 @@ var PrevNextButtons = Radium(React.createClass({
     }
 
     if (prevQuestionPath) {
-      prevQuestionButton = <Button style={prevButtonStyle} href={prevQuestionPath}>prev</Button>
+      prevQuestionButton = <Button style={prevButtonStyle} href={prevQuestionPath}>prev</Button>;
     }
 
     // Next button.
     var nextQuestionButton;
     var nextQuestionPath;
     var nextButtonStyle = [
-      sharedStyle, {
-        
-      }
+      sharedStyle, {}
     ];
 
     if (this.state.questionId === 'e' && AppStore.getQuestion(this.state.roundId, 0)) {
@@ -80,7 +76,7 @@ var PrevNextButtons = Radium(React.createClass({
     }
 
     if (nextQuestionPath) {
-      nextQuestionButton = <Button style={nextButtonStyle} href={nextQuestionPath}>next</Button>
+      nextQuestionButton = <Button style={nextButtonStyle} href={nextQuestionPath}>next</Button>;
     }
 
     // Output.
