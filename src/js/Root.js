@@ -11,6 +11,7 @@ import ExampleContainer from './components/ExampleContainer.react';
 
 import AppStore from './stores/AppStore';
 import RouteValidator from './utils/RouteValidator';
+import RouteActions from './actions/RouteActions';
 
 var routeValidator = RouteValidator([
   function (next, replace) {
@@ -47,10 +48,15 @@ export default class Root extends Component {
     history: PropTypes.object.isRequired
   };
 
+  checkState() {
+    const { location, params } = this.state;
+    RouteActions.onRouteUpdated(location, params);
+  };
+
   render() {
     const { history } = this.props;
     return (
-      <Router history={history}>
+      <Router history={history} onUpdate={this.checkState}>
         <Route name='home' path='/' component={App}>
           <IndexRoute component={HomeScreen}/>
           <Route name='about' path='/about' component={About}/>

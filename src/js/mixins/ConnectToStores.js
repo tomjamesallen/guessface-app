@@ -1,8 +1,6 @@
 // Mixin based on:
 // https://github.com/gaearon/flux-react-router-example/blob/master/scripts/utils/connectToStores.js
 
-import shallowEqual from 'react-pure-render/shallowEqual';
-
 export default function(stores, getState) {
   return {
 

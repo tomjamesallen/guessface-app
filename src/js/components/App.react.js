@@ -39,7 +39,7 @@ var App = Radium(React.createClass({
     };
 
     function onClick() {
-      console.log('clicked');
+      
     }
 
     var buttonTestStyles = {

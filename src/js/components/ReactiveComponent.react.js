@@ -19,8 +19,6 @@ export default Radium(React.createClass({
    */
   render() {
 
-    // console.log('re-render reactiveComponent', this.props, this);
-
     var componentBreakpoint = 400;
     var componentSize = this.state.componentWidth;
 

@@ -12,6 +12,9 @@ import ActionTypes from '../constants/ActionTypes';
 import Api from '../constants/Api';
 const CHANGE_EVENT = 'change';
 
+// Stores.
+import RouteStore from './RouteStore';
+
 // Get ENV.
 const ENV = process.env.NODE_ENV;
 
@@ -129,6 +132,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
  * Register callback to handle all updates.
  */
 AppDispatcher.register(function(action) {
+
+  AppDispatcher.waitFor([RouteStore.dispatchToken]);
+  
   switch(action.actionType) {
     case ActionTypes.INITIAL_DATA_FETCH:
       initialDataFetch();
