@@ -1,45 +1,43 @@
 // App imports.
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import EventEmitter from 'events';
-import history from '../history';
+import AppDispatcher from '../dispatcher/AppDispatcher'
+import EventEmitter from 'events'
 
 // Helpers.
-import assign from 'object-assign';
-import jsonAjaxHelper from '../helpers/jsonAjaxHelper';
+import assign from 'object-assign'
+import jsonAjaxHelper from '../helpers/jsonAjaxHelper'
 
 // Constants.
-import ActionTypes from '../constants/ActionTypes';
-import Api from '../constants/Api';
-const CHANGE_EVENT = 'change';
+import ActionTypes from '../constants/ActionTypes'
+import Api from '../constants/Api'
+const CHANGE_EVENT = 'change'
 
 // Stores.
-import RouteStore from './RouteStore';
+import RouteStore from './RouteStore'
 
 // Get ENV.
-const ENV = process.env.NODE_ENV;
+// const ENV = process.env.NODE_ENV
 
 function getInitialState() {
   return {
     rounds: {},
     dataReady: false
-  };
+  }
 };
 
 // Create state var and set to initial state.
-var state = getInitialState();
+var state = getInitialState()
 
 function initialDataFetch() {
-  jsonAjaxHelper(Api.url, function (data) {
-    parseData(data.data);
-    AppStore.emitChange();
-  });
+  jsonAjaxHelper(Api.url, function(data) {
+    parseData(data.data)
+    AppStore.emitChange()
+  })
 };
 
 function parseData(data) {
-  state.rounds = data.rounds;
-  state.dataReady = true;
+  state.rounds = data.rounds
+  state.dataReady = true
 }
-
 
 /**
  * Create and export the AppAppStore.
@@ -51,7 +49,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getState() {
-    return state;
+    return state
   },
 
   /**
@@ -62,19 +60,19 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @return {object}        returns the round meta data.
    */
   getRound(roundId, returnFullData) {
-    if (!state.dataReady) return;
+    if (!state.dataReady) return
 
-    roundId = parseInt(roundId, 10);
-    const round = state.rounds[roundId];
+    roundId = parseInt(roundId, 10)
+    const round = state.rounds[roundId]
 
-    if (typeof round === 'undefined') return;
+    if (typeof round === 'undefined') return
 
-    round.roundLength = round.questionsData.length;
-    const hasExample = typeof round.exampleData === 'object';
+    round.roundLength = round.questionsData.length
+    const hasExample = typeof round.exampleData === 'object'
 
     if (returnFullData) {
-      round.roundId = roundId;
-      return round;
+      round.roundId = roundId
+      return round
     }
 
     return {
@@ -83,7 +81,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
       roundLength: round.roundLength,
       description: round.description || null,
       hasExample
-    };
+    }
   },
 
   /**
@@ -93,58 +91,58 @@ var AppStore = assign({}, EventEmitter.prototype, {
    * @return {object}        returns the question data.
    */
   getQuestion(roundId, questionId) {
-    const round = this.getRound(roundId, true);
-    if (!round) return;
+    const round = this.getRound(roundId, true)
+    if (!round) return
 
     // Handle example question.
     if (questionId === 'e') {
-      if (typeof round.exampleData === 'undefined') return;
-      else return round.exampleData;
+      if (typeof round.exampleData === 'undefined') return
+      else return round.exampleData
     }
     else {
-      questionId = parseInt(questionId, 10);
-      if (typeof round.questionsData[questionId] === 'undefined') return;
-      else return round.questionsData[questionId];
+      questionId = parseInt(questionId, 10)
+      if (typeof round.questionsData[questionId] === 'undefined') return
+      else return round.questionsData[questionId]
     }
   },
 
   getRoundPath(roundId) {
-    const round = this.getRound(roundId);
-    if (!round) return;
-    const route = RouteStore.getRoute();
+    const round = this.getRound(roundId)
+    if (!round) return
+    const route = RouteStore.getRoute()
 
     return {
       pathname: `/round/${round.roundId + 1}`,
       query: route.location.query
-    };
+    }
   },
 
   getQuestionPath(roundId, questionId) {
-    const question = this.getQuestion(roundId, questionId);
-    if (!question) return;
-    const route = RouteStore.getRoute();
+    const question = this.getQuestion(roundId, questionId)
+    if (!question) return
+    const route = RouteStore.getRoute()
 
-    var pathRoundId = question.roundData.roundId + 1;
-    var pathQuestionId = question.questionId;
-    if (typeof pathQuestionId === 'number') pathQuestionId ++;
+    var pathRoundId = question.roundData.roundId + 1
+    var pathQuestionId = question.questionId
+    if (typeof pathQuestionId === 'number') pathQuestionId++
 
     return {
       pathname: `/round/${pathRoundId}/${pathQuestionId}`,
       query: route.location.query
-    };
-  },
-
-  getRoundIdsAsStrings() {
-    var roundIds = [];
-    if (state.rounds) {
-      state.rounds.forEach(function (round) {
-        roundIds.push(String(round.roundId));
-      });
     }
-    return roundIds;
   },
 
-  getRoundQuestionIdsAsStrings(roundId) {
+  getValidRoundIdParams() {
+    var roundIds = []
+    if (state.rounds) {
+      state.rounds.forEach(function(round) {
+        roundIds.push(String(round.roundId + 1))
+      })
+    }
+    return roundIds
+  },
+
+  getValidQuestionIdParamsForRound(roundId) {
     // var roundIds = [];
     // if (state.rounds) {
     //   state.rounds.forEach(function (round) {
@@ -155,46 +153,45 @@ var AppStore = assign({}, EventEmitter.prototype, {
   },
 
   isDataReady() {
-    return state.dataReady;
+    return state.dataReady
   },
 
   /**
    * Used in the functions above to trigger an update to the UI.
    */
   emitChange() {
-    this.emit(CHANGE_EVENT);
+    this.emit(CHANGE_EVENT)
   },
 
   /**
    * @param {function} callback
    */
   addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
+    this.on(CHANGE_EVENT, callback)
   },
 
   /**
    * @param {function} callback
    */
   removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback)
   }
-});
+})
 
 /**
  * Register callback to handle all updates.
  */
 AppDispatcher.register(function(action) {
+  AppDispatcher.waitFor([RouteStore.dispatchToken])
 
-  AppDispatcher.waitFor([RouteStore.dispatchToken]);
-
-  switch(action.actionType) {
+  switch (action.actionType) {
     case ActionTypes.INITIAL_DATA_FETCH:
-      initialDataFetch();
+      initialDataFetch()
 
-      break;
+      break
 
     default:
   }
-});
+})
 
-export default AppStore;
+export default AppStore

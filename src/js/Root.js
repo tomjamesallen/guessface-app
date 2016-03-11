@@ -16,16 +16,15 @@ import RouteActions from './actions/RouteActions'
 var routeValidator = RouteValidator([
   function(next, replace) {
     // Validate round Id.
-    var validRoundIds = AppStore.getRoundIdsAsStrings()
+    const validRoundIds = AppStore.getValidRoundIdParams()
     if (validRoundIds.indexOf(next.params.roundId) === -1) {
       replace('/')
       return
     }
-    // var validQuestionIds
 
     const params = next.params
-    var _roundId = parseInt(params.roundId, 10) - 1
-    var _questionId = params.questionId
+    const _roundId = parseInt(params.roundId, 10) - 1
+    let _questionId = params.questionId
     if (_questionId !== 'e') _questionId = parseFloat(_questionId, 10) - 1
 
     if (params.roundId) {
@@ -52,7 +51,7 @@ export default class Root extends Component {
     RouteActions.onRouteUpdated(location, params)
   };
 
-  rende() {
+  render() {
     const { history } = this.props
     return (
       <Router history={history} onUpdate={this.checkState}>
