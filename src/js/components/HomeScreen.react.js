@@ -10,7 +10,7 @@ export default Radium(React.createClass({
   render() {
 
     return (
-      <div>
+      <div className={this.constructor.displayName}>
         <h2>Homescreen</h2>
       </div>
     );

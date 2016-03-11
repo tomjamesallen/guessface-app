@@ -14,7 +14,7 @@ const rem = Rem();
 
 var noop = function () {};
 
-var Logo = Radium(React.createClass({
+var Button = Radium(React.createClass({
 
   /**
    * Render the App component.
@@ -111,7 +111,7 @@ var Logo = Radium(React.createClass({
 
     if (this.props.href) {
       return (
-        <Link style={styles.base} to={this.props.href}>
+        <Link style={styles.base} to={this.props.href} className={this.constructor.displayName}>
           <span key="hoverTrigger" style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>
@@ -124,7 +124,7 @@ var Logo = Radium(React.createClass({
     }
     else {
       return (
-        <button style={styles.base} onClick={onClick}>
+        <button style={styles.base} onClick={onClick} className={this.constructor.displayName}>
           <span key="hoverTrigger" style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>
@@ -139,4 +139,4 @@ var Logo = Radium(React.createClass({
 
 }));
 
-export default Logo;
+export default Button;

@@ -49,11 +49,11 @@ var App = Radium(React.createClass({
     };
 
     return (
-      <div style={styles.base}>
+      <div style={styles.base} className={this.constructor.displayName}>
         <Logo style={{
           width: '300px',
           position: 'absolute',
-          right: rem(SizingVars.unit)
+          left: rem(SizingVars.unit*1.5)
         }}/>
 
         {this.props.children ? React.cloneElement(this.props.children) : null}

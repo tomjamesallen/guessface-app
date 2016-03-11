@@ -69,6 +69,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
     if (typeof round === 'undefined') return;
 
+    round.roundLength = round.questionsData.length;
+
     if (returnFullData) {
       round.roundId = roundId;
       return round;
@@ -76,7 +78,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
     
     return {
       title: round.title,
-      roundId: round.roundId
+      roundId: round.roundId,
+      roundLength: round.roundLength,
+      description: round.description || null
     };
   },
 

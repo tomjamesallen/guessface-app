@@ -53,7 +53,7 @@ var Question = Radium(React.createClass({
     if (!this.state.question) return <div>Question not found</div>;
 
     return (
-      <div>
+      <div className={this.constructor.displayName}>
         Round: {this.state.round.title} | Question: {this.props.questionId}
         <br/>
         <PrevNext />

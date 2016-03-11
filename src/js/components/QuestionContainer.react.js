@@ -11,7 +11,7 @@ var QuestionContainer = React.createClass({
   render() {
 
     return (
-      <div>
+      <div className={this.constructor.displayName}>
         <Question roundId={this.props.params.roundId} questionId={this.props.params.questionId}/>
       </div>
     );

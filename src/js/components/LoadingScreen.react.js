@@ -9,7 +9,7 @@ var LoadingScreen = React.createClass({
   render() {
 
     return (
-      <div>
+      <div className={this.constructor.displayName}>
         Loading!
       </div>
     );

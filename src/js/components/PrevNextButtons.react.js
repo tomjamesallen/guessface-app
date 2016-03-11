@@ -51,7 +51,7 @@ var PrevNextButtons = Radium(React.createClass({
     var prevQuestionPath;
     var prevButtonStyle = [
       sharedStyle, {
-        marginRight: rem(SizingVars.unit)
+        marginRight: rem(SizingVars.unit/2)
       }
     ];
 
@@ -60,7 +60,7 @@ var PrevNextButtons = Radium(React.createClass({
     }
 
     if (prevQuestionPath) {
-      prevQuestionButton = <Button style={prevButtonStyle} href={prevQuestionPath}>Prev</Button>
+      prevQuestionButton = <Button style={prevButtonStyle} href={prevQuestionPath}>prev</Button>
     }
 
     // Next button.
@@ -80,12 +80,12 @@ var PrevNextButtons = Radium(React.createClass({
     }
 
     if (nextQuestionPath) {
-      nextQuestionButton = <Button style={nextButtonStyle} href={nextQuestionPath}>Next</Button>
+      nextQuestionButton = <Button style={nextButtonStyle} href={nextQuestionPath}>next</Button>
     }
 
     // Output.
     return (
-      <div>
+      <div className={this.constructor.displayName}>
         {prevQuestionButton}
         {nextQuestionButton}
       </div>

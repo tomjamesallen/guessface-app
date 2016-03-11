@@ -30,7 +30,7 @@ export default Radium(React.createClass({
     };
 
     return (
-      <div className="about">
+      <div className={this.constructor.displayName}>
         <h2 className="about__heading">About</h2>
         <p>An about page</p>
 

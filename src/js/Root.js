@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Router, Route, IndexRoute, NotFoundRoute } from 'react-router';
+import { Router, Route, IndexRoute, NotFoundRoute, Redirect } from 'react-router';
 
 import App from './components/App.react';
 import About from './components/About.react';
@@ -51,7 +51,7 @@ export default class Root extends Component {
         <Route name='home' path='/' component={App}>
           <IndexRoute component={HomeScreen}/>
           <Route name='about' path='/about' component={About}/>
-
+          <Redirect from="round" to="/" />
           <Route path="round/:roundId" component={RoundContainer} onEnter={routeValidator.validator}>
             <IndexRoute component={RoundHome}/>
             <Route path="example" component={ExampleContainer} onEnter={routeValidator.validator}/>
