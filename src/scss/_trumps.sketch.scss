@@ -8,3 +8,22 @@ html, body, .content-wrapper {
 body {
   font-family: "museo-sans-condensed",sans-serif;
 }
+
+// Scale base font sizing.
+// This will scale anything sized with EMs or REMs.
+html {
+
+  font-size: 16px;
+
+  @media (min-width: 400px) {
+    font-size: 14px;
+  }   
+
+  @media (min-width: 600px) {
+    font-size: 16px;
+  } 
+
+  @media (min-width: 700px) {
+    font-size: 18px;
+  } 
+}

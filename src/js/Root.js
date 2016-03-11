@@ -34,15 +34,6 @@ var routeValidator = RouteValidator([
   },
 ]);
 
-var onEnter = function (next, replace) {
-  // routeValidator(next, replace);
-  console.log(next);
-};
-
-function runCallback() {
-  console.log('callback', arguments);
-}
-
 export default class Root extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired

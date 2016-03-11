@@ -6,7 +6,11 @@ var Link = Radium(LinkImport);
 import AppConstants from '../constants/AppConstants';
 import ThemeColors from '../constants/ThemeColors';
 import SizingVars from '../constants/SizingVars';
+const borders = SizingVars.borders;
 import AnimationConstants from '../constants/AnimationConstants';
+
+import { Rem, px } from '../helpers/units';
+const rem = Rem();
 
 var noop = function () {};
 
@@ -26,8 +30,8 @@ var Logo = Radium(React.createClass({
       width: '0.5em',
       top: 0,
       height: '100%',
-      borderTop: `3px solid ${ThemeColors.primary}`,
-      borderBottom: `3px solid ${ThemeColors.primary}`,
+      borderTop: `${px(borders.sm)} solid ${ThemeColors.primary}`,
+      borderBottom: `${px(borders.sm)} solid ${ThemeColors.primary}`,
       zIndex: '3'
     };
 
@@ -43,7 +47,7 @@ var Logo = Radium(React.createClass({
           padding: '0.15em 0.5em',
           textDecoration: 'none',
           color: ThemeColors.primary,
-          fontSize: SizingVars.type.h3
+          fontSize: rem(SizingVars.type.h3)
         },
         this.props.style
       ],
@@ -62,14 +66,14 @@ var Logo = Radium(React.createClass({
         borderShared,
         {
           left: 0,
-          borderLeft: `4px solid ${ThemeColors.primary}`,
+          borderLeft: `${px(borders.med)} solid ${ThemeColors.primary}`,
         }
       ],
       __rightBorder: [
         borderShared,
         {
           right: 0,
-          borderRight: `4px solid ${ThemeColors.primary}`,
+          borderRight: `${px(borders.med)} solid ${ThemeColors.primary}`,
         }
       ],
       __background: [
@@ -86,14 +90,10 @@ var Logo = Radium(React.createClass({
         hovering && {
           height: '100%'
         },
-        depressed && {
+        (depressed || this.props.active) && {
           height: '100%',
           backgroundColor: 'inherit'
         },
-        this.props.active && {
-          height: '100%',
-          backgroundColor: 'inherit'
-        }
       ],
       _hover__background: {
         height: '100%'
