@@ -1,18 +1,12 @@
 {
-  "plugins": [
-    "react"
-  ],
-  "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+  "extends": ["standard", "standard-react"],
+  "ecmaFeatures": {
+    "classes": true,
+    "jsx": true
   },
+  "parser": "babel-eslint",
   "rules": {
-    "semi": 2,
-    "eqeqeq": "off",
-    "quotes": ["error", "single"],
-    "no-trailing-spaces": 2
+    "brace-style": [2, "stroustrup", { "allowSingleLine": true }],
+    "space-before-function-paren": [2, "never"]
   }
 }
