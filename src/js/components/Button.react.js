@@ -1,26 +1,25 @@
-import React, { PropTypes } from 'react';
-import Radium from 'radium';
-import { Link as LinkImport } from 'react-router';
-var Link = Radium(LinkImport);
+import React, { PropTypes } from 'react'
+import Radium from 'radium'
+import { Link as LinkImport } from 'react-router'
+var Link = Radium(LinkImport)
 
-import AppConstants from '../constants/AppConstants';
-import ThemeColors from '../constants/ThemeColors';
-import SizingVars from '../constants/SizingVars';
-const borders = SizingVars.borders;
-import AnimationConstants from '../constants/AnimationConstants';
+import AppConstants from '../constants/AppConstants'
+import ThemeColors from '../constants/ThemeColors'
+import SizingVars from '../constants/SizingVars'
+const borders = SizingVars.borders
+import AnimationConstants from '../constants/AnimationConstants'
 
-import { Rem, px } from '../helpers/units';
-const rem = Rem();
+import { Rem, px } from '../helpers/units'
+const rem = Rem()
 
-var noop = function () {};
+var noop = function () {}
 
 var Button = Radium(React.createClass({
 
   propTypes: {
     size: PropTypes.oneOf(['small', 'med', 'lrg']),
     onClick: PropTypes.func,
-    query: PropTypes.object,
-    to: PropTypes.object
+    query: PropTypes.object
   },
 
   getDefaultProps() {

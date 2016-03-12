@@ -42,6 +42,10 @@ export default Radium(React.createClass({
           <Button style={buttonTestStyles} href="/round/1/3">next</Button>
         </div>
 
+        <Link to='/about'>About</Link><br/>
+        <Link to={{pathname: '/about', query:{test:'test'}}}>About?test=test</Link><br/>
+
+        <Link to="/round/1/2">round/1/2</Link><br/>
         <Link to="/round/1/2">round/1/2</Link><br/>
         <Link to="/round/1/e">round/1/e</Link><br/>
         <Link to="/round/3/25">round/3/25</Link><br/>

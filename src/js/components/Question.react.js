@@ -52,7 +52,7 @@ var Question = Radium(React.createClass({
 
     let prevNext
     if (this.state.questionId === 'e') {
-      prevNext = <Button href='/round/1/1'>start round</Button>
+      prevNext = <Button to='/round/1/1'>start round</Button>
     }
     else {
       prevNext = <PrevNext />

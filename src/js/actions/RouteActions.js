@@ -2,7 +2,7 @@
  * RouteActions
  */
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AppDispatcher from '../dispatcher/AppDispatcher'
 
 export default {
 
@@ -11,7 +11,7 @@ export default {
       actionType: 'onRouteUpdated',
       location,
       params
-    });
+    })
   }
 
-};
+}
