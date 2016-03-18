@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import Radium from 'radium'
 import AppStore from '../stores/AppStore'
 import LoadingScreen from './LoadingScreen.react'
 import componentWidthMixin from 'react-component-width-mixin'
 import TransitionHook from '../mixins/TransitionHook'
 import ConnectToStores from '../mixins/ConnectToStores'
+import CallbackManager from '../utils/CallbackManager'
+const callbackManager = CallbackManager()
 
 import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
-import ResponsiveImage, { Source } from './ResponsiveImage.react'
+import ResponsiveImageImport from './ResponsiveImage.react'
+const ResponsiveImage = Radium(ResponsiveImageImport)
 
 function getState(props) {
   var _roundId = parseInt(props.roundId, 10) - 1
@@ -33,15 +36,54 @@ function getState(props) {
 function transitionHook(call) {
   return true
   // setTimeout(call.resolve, 900);
-};
+}
 
 var Question = Radium(React.createClass({
+
+  propTypes: {
+    roundId: PropTypes.string,
+    questionId: PropTypes.string
+  },
+
+  getInitialState() {
+    return {
+      imgsReady: false,
+      test: true
+    }
+  },
 
   mixins: [
     ConnectToStores([AppStore], getState),
     componentWidthMixin,
     TransitionHook(transitionHook)
   ],
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.roundId !== nextProps.roundId ||
+        this.props.questionId !== nextProps.questionId) {
+      this.setState({
+        imgsReady: false
+      })
+      callbackManager.reset()
+    }
+  },
+
+  _handleImgLoaded(ref) {
+    callbackManager.register(ref)
+    return (imgComponent) => {
+      callbackManager.complete(ref, (refs) => {
+        this.setState({
+          imgsReady: true
+        })
+      })
+    }
+  },
+
+  _handleClick() {
+    this.setState({
+      test: !this.state.test
+    })
+  },
 
   /**
    * Render the App component.
@@ -53,35 +95,37 @@ var Question = Radium(React.createClass({
 
     let prevNext
     if (this.state.questionId === 'e') {
-      prevNext = <Button to='/round/1/1'>start round</Button>
+      let path = AppStore.getQuestionPath(this.state.roundId, 0)
+      prevNext = <Button to={path}>start round</Button>
     }
     else {
       prevNext = <PrevNext />
     }
 
-    const img = this.state.question.imgs.mix
-    const srcs = img.srcs
-    const sizes = Object.keys(img.srcs)
+    var imgs = {}
+    const imgLabels = Object.keys(this.state.question.imgs)
 
-    const imageProps = {
-      srcs,
-      aspectRatio: img.aspectRatio
-    }
-
-    function onImageLoad() {
-      console.log('image loaded!')
-    }
+    imgLabels.forEach((label) => {
+      let img = this.state.question.imgs[label]
+      let imgProps = {
+        srcs: img.srcs,
+        aspectRatio: img.aspectRatio,
+        onLoad: this._handleImgLoaded(label)
+      }
+      imgs[label] = (
+        <ResponsiveImage {...imgProps}/>
+      )
+    })
 
     return (
       <div className={this.constructor.displayName}>
         Round: {this.state.round.title} | Question: {this.state.question.questionId}
-        <ResponsiveImage onLoad={onImageLoad} className='quesiton-image' aspectRatio={img.aspectRatio}>
-          {sizes.map((size) => {
-            return <Source key={size} src={srcs[size]} width={parseInt(size, 10)}/>
-          })}
-        </ResponsiveImage>
 
-        {/*<ResponsiveImage {...imageProps}/>*/}
+        {imgs.a}
+        {imgs.mix}
+        {imgs.b}
+
+        <button onClick={this._handleClick}>{this.state.test ? 'toggle on' : 'toggle off'}</button>
 
         <br/>
         {prevNext}
