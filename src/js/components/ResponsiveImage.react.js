@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import componentWidthMixin from 'react-component-width-mixin'
-import isClient from 'is-client'
 
 var Source = React.createClass({
   propTypes: {
