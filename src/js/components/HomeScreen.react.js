@@ -1,6 +1,5 @@
 import React from 'react'
 import Radium from 'radium'
-import { Link } from 'react-router'
 import AppStore from '../stores/AppStore'
 import ConnectToStores from '../mixins/ConnectToStores'
 
@@ -12,7 +11,7 @@ function getState() {
   }
 }
 
-export default Radium(React.createClass({
+var HomeScreen = Radium(React.createClass({
 
   mixins: [ConnectToStores([AppStore], getState)],
 
@@ -30,3 +29,5 @@ export default Radium(React.createClass({
     )
   }
 }))
+
+export default HomeScreen

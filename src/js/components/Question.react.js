@@ -8,6 +8,7 @@ import ConnectToStores from '../mixins/ConnectToStores'
 
 import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
+import ResponsiveImage, { Source } from './ResponsiveImage.react'
 
 function getState(props) {
   var _roundId = parseInt(props.roundId, 10) - 1
@@ -58,9 +59,30 @@ var Question = Radium(React.createClass({
       prevNext = <PrevNext />
     }
 
+    const img = this.state.question.imgs.mix
+    const srcs = img.srcs
+    const sizes = Object.keys(img.srcs)
+
+    const imageProps = {
+      srcs,
+      aspectRatio: img.aspectRatio
+    }
+
+    function onImageLoad() {
+      console.log('image loaded!')
+    }
+
     return (
       <div className={this.constructor.displayName}>
         Round: {this.state.round.title} | Question: {this.state.question.questionId}
+        <ResponsiveImage onLoad={onImageLoad} className='quesiton-image' aspectRatio={img.aspectRatio}>
+          {sizes.map((size) => {
+            return <Source key={size} src={srcs[size]} width={parseInt(size, 10)}/>
+          })}
+        </ResponsiveImage>
+
+        {/*<ResponsiveImage {...imageProps}/>*/}
+
         <br/>
         {prevNext}
         {this.state.question.extra ? this.state.question.extra : null}

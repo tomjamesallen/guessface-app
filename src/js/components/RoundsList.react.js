@@ -3,7 +3,7 @@ import Radium from 'radium'
 import { Link } from 'react-router'
 import BT from '../constants/BaseTypeStyles'
 
-export default Radium(React.createClass({
+var RoundsList = Radium(React.createClass({
 
   propTypes: {
     rounds: PropTypes.array.isRequired
@@ -27,3 +27,5 @@ export default Radium(React.createClass({
     )
   }
 }))
+
+export default RoundsList
