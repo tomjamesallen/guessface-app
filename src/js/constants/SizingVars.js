@@ -1,4 +1,4 @@
-const unit = 16;
+const unit = 16
 
 export default {
   unit: unit,
@@ -12,4 +12,4 @@ export default {
     h3: unit * 1.5,
     p: unit
   }
-};
+}

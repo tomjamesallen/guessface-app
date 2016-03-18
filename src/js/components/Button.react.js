@@ -18,7 +18,10 @@ var Button = Radium(React.createClass({
     query: PropTypes.object,
     style: PropTypes.node,
     active: PropTypes.bool,
-    to: PropTypes.node,
+    to: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.string
+    ]),
     children: PropTypes.node
   },
 

@@ -1,33 +1,33 @@
-const defaultRootFontSize = 16;
+const defaultRootFontSize = 16
 
 function getRootFontSize() {
   if (!document ||
       !document.querySelector ||
       !window ||
       !window.getComputedStyle) {
-    return defaultRootFontSize;
+    return defaultRootFontSize
   }
 
-  var root = document.querySelector(':root');
-  var rawRootFontSize = window.getComputedStyle(root).getPropertyValue('font-size');
-  return parseInt(rawRootFontSize.split('px')[0]);
+  var root = document.querySelector(':root')
+  var rawRootFontSize = window.getComputedStyle(root).getPropertyValue('font-size')
+  return parseInt(rawRootFontSize.split('px')[0])
 }
 
 export function Rem(rootFontSize = defaultRootFontSize) {
   return function rem(value, decimalPlaces = 4) {
     if (rootFontSize === 'd' || rootFontSize === 'dynamic') {
-      rootFontSize = getRootFontSize();
+      rootFontSize = getRootFontSize()
     }
 
-    var decimalPlaces = parseInt(decimalPlaces, 10),
-        unRounded = value/rootFontSize,
-        roundingMultiplier = Math.pow(10, decimalPlaces),
-        rounded = Math.round(unRounded * roundingMultiplier) / roundingMultiplier;
+    decimalPlaces = parseInt(decimalPlaces, 10)
+    var unRounded = value / rootFontSize
+    var roundingMultiplier = Math.pow(10, decimalPlaces)
+    var rounded = Math.round(unRounded * roundingMultiplier) / roundingMultiplier
 
-    return `${rounded}rem`;
-  };
+    return `${rounded}rem`
+  }
 }
 
 export function px(value) {
-  return `${value}px`;
+  return `${value}px`
 }

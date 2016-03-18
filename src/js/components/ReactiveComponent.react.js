@@ -1,9 +1,9 @@
-import React from 'react';
-import Radium from 'radium';
-import componentWidthMixin from 'react-component-width-mixin';
+import React from 'react'
+import Radium from 'radium'
+import componentWidthMixin from 'react-component-width-mixin'
 
-import ThemeColors from '../constants/ThemeColors';
-import SizingVars from '../constants/SizingVars';
+import ThemeColors from '../constants/ThemeColors'
+import SizingVars from '../constants/SizingVars'
 
 export default Radium(React.createClass({
 
@@ -18,9 +18,8 @@ export default Radium(React.createClass({
    * @return {object}
    */
   render() {
-
-    var componentBreakpoint = 400;
-    var componentSize = this.state.componentWidth;
+    var componentBreakpoint = 400
+    var componentSize = this.state.componentWidth
 
     var styles = {
       base: [{
@@ -32,15 +31,15 @@ export default Radium(React.createClass({
       heading: [{
         color: ThemeColors.primary
       }]
-    };
+    }
 
     if (componentSize > componentBreakpoint) {
       styles.base.push({
         backgroundColor: ThemeColors.primary
-      });
+      })
       styles.heading.push({
         color: ThemeColors.secondary
-      });
+      })
     }
 
     return (
@@ -50,7 +49,7 @@ export default Radium(React.createClass({
         <p>I am currently {componentSize}px wide.</p>
         <p><code>{componentSize > componentBreakpoint ? 'Component > Breakpoint' : 'Component <= Breakpoint'}</code></p>
       </div>
-    );
+    )
   }
 
-}));
+}))

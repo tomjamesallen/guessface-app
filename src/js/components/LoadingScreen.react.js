@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 var LoadingScreen = React.createClass({
 
@@ -7,14 +7,13 @@ var LoadingScreen = React.createClass({
    * @return {object}
    */
   render() {
-
     return (
       <div className={this.constructor.displayName}>
         Loading!
       </div>
-    );
+    )
   }
 
-});
+})
 
-export default LoadingScreen;
+export default LoadingScreen

@@ -1,6 +1,6 @@
-import SizingVars from './SizingVars';
-import { Rem, px } from '../helpers/units';
-const rem = Rem();
+import SizingVars from './SizingVars'
+import { Rem } from '../helpers/units'
+const rem = Rem()
 
 export default {
   h1: {
@@ -29,4 +29,4 @@ export default {
   a: {
 
   }
-};
+}

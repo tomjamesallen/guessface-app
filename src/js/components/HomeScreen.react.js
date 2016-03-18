@@ -3,8 +3,6 @@ import Radium from 'radium'
 import { Link } from 'react-router'
 import history from '../history'
 
-window.__history = history
-
 export default Radium(React.createClass({
 
   /**

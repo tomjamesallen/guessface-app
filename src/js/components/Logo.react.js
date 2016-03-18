@@ -1,18 +1,21 @@
-import React, { PropTypes } from 'react';
-import Radium from 'radium';
-import { Link as LinkImport } from 'react-router';
-var Link = Radium(LinkImport);
+import React, { PropTypes } from 'react'
+import Radium from 'radium'
+import { Link as LinkImport } from 'react-router'
+var Link = Radium(LinkImport)
 
-import AppConstants from '../constants/AppConstants';
+import AppConstants from '../constants/AppConstants'
 
 var Logo = Radium(React.createClass({
+
+  propTypes: {
+    style: PropTypes.node
+  },
 
   /**
    * Render the App component.
    * @return {object}
    */
   render() {
-
     var styles = {
       base: [
         {
@@ -27,7 +30,7 @@ var Logo = Radium(React.createClass({
       intrinsic: {
         position: 'relative',
         display: 'block',
-        paddingBottom: '15.64%',
+        paddingBottom: '15.64%'
       },
       inner: {
         position: 'absolute',
@@ -38,7 +41,7 @@ var Logo = Radium(React.createClass({
         backgroundRepeat: 'no-repeat',
         backgroundImage: 'url(/imgs/Logo.svg)'
       }
-    };
+    }
 
     return (
       <Link style={styles.base} to={{pathname: '/'}} className={this.constructor.displayName}>
@@ -46,9 +49,9 @@ var Logo = Radium(React.createClass({
           <span style={styles.inner}>{AppConstants.APP_NAME}</span>
         </span>
       </Link>
-    );
+    )
   }
 
-}));
+}))
 
-export default Logo;
+export default Logo
