@@ -19,7 +19,7 @@ import RouteStore from './RouteStore'
 
 function getInitialState() {
   return {
-    rounds: {},
+    rounds: [],
     dataReady: false
   }
 };
@@ -67,8 +67,14 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
     if (typeof round === 'undefined') return
 
+    const route = RouteStore.getRoute()
+
     round.roundLength = round.questionsData.length
-    const hasExample = typeof round.exampleData === 'object'
+    round.hasExample = typeof round.exampleData === 'object'
+    round.path = {
+      pathname: `/round/${round.roundId + 1}`,
+      query: route.location.query
+    }
 
     if (returnFullData) {
       round.roundId = roundId
@@ -80,56 +86,50 @@ var AppStore = assign({}, EventEmitter.prototype, {
       roundId: round.roundId,
       roundLength: round.roundLength,
       description: round.description || null,
-      hasExample
-    }
-  },
-
-  /**
-   * [getQuestion description]
-   * @param  {string or int} roundId.
-   * @param  {string or int} questionId.
-   * @return {object}        returns the question data.
-   */
-  getQuestion(roundId, questionId) {
-    const round = this.getRound(roundId, true)
-    if (!round) return
-
-    // Handle example question.
-    if (questionId === 'e') {
-      if (typeof round.exampleData === 'undefined') return
-      else return round.exampleData
-    }
-    else {
-      questionId = parseInt(questionId, 10)
-      if (typeof round.questionsData[questionId] === 'undefined') return
-      else return round.questionsData[questionId]
+      hasExample: round.hasExample,
+      path: round.path
     }
   },
 
   getRoundPath(roundId) {
     const round = this.getRound(roundId)
     if (!round) return
-    const route = RouteStore.getRoute()
+    return round.path
+  },
 
-    return {
-      pathname: `/round/${round.roundId + 1}`,
+  getQuestion(roundId, questionId) {
+    const round = this.getRound(roundId, true)
+    if (!round) return
+    const route = RouteStore.getRoute()
+    let question
+
+    // Handle example question.
+    if (questionId === 'e') {
+      if (typeof round.exampleData === 'undefined') return
+      else question = round.exampleData
+    }
+    else {
+      questionId = parseInt(questionId, 10)
+      if (typeof round.questionsData[questionId] === 'undefined') return
+      else question = round.questionsData[questionId]
+    }
+
+    let pathRoundId = question.roundData.roundId + 1
+    let pathQuestionId = question.questionId
+    if (typeof pathQuestionId === 'number') pathQuestionId++
+
+    question.path = {
+      pathname: `/round/${pathRoundId}/${pathQuestionId}`,
       query: route.location.query
     }
+
+    return question
   },
 
   getQuestionPath(roundId, questionId) {
     const question = this.getQuestion(roundId, questionId)
     if (!question) return
-    const route = RouteStore.getRoute()
-
-    var pathRoundId = question.roundData.roundId + 1
-    var pathQuestionId = question.questionId
-    if (typeof pathQuestionId === 'number') pathQuestionId++
-
-    return {
-      pathname: `/round/${pathRoundId}/${pathQuestionId}`,
-      query: route.location.query
-    }
+    return question.path
   },
 
   getValidRoundIdParams() {
@@ -154,6 +154,18 @@ var AppStore = assign({}, EventEmitter.prototype, {
       questionIds.push('e')
     }
     return questionIds
+  },
+
+  getRounds() {
+    let rounds = []
+    state.rounds.forEach((round, id) => {
+      rounds.push(this.getRound(id))
+    })
+    return rounds
+  },
+
+  getQuestionsForRound() {
+
   },
 
   isDataReady() {

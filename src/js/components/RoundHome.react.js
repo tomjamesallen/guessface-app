@@ -25,8 +25,7 @@ var RoundHome = Radium(React.createClass({
 
   render() {
     if (!this.state.round) {
-      console.log('no round', this.state.route)
-      return <div/>
+      return false
     }
 
     var description
