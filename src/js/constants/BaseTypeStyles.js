@@ -21,12 +21,16 @@ export default {
     marginBottom: rem(SizingVars.type.p * 1.5)
   },
   ul: {
-    fontSize: rem(SizingVars.type.p)
+    fontSize: rem(SizingVars.type.p),
+    lineHeight: rem(SizingVars.type.p * 1.5),
+    marginBottom: rem(SizingVars.type.p * 1.5),
+    listStyleType: 'none'
   },
   li: {
-    fontSize: rem(SizingVars.type.p)
+    fontSize: rem(SizingVars.type.p),
+    lineHeight: rem(SizingVars.type.p * 1.5)
   },
   a: {
-
+    color: 'inherit'
   }
 }

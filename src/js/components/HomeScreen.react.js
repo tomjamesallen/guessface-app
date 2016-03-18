@@ -4,6 +4,8 @@ import { Link } from 'react-router'
 import AppStore from '../stores/AppStore'
 import ConnectToStores from '../mixins/ConnectToStores'
 
+import RoundsList from './RoundsList.react'
+
 function getState() {
   return {
     rounds: AppStore.getRounds()
@@ -19,11 +21,11 @@ export default Radium(React.createClass({
    * @return {object}
    */
   render() {
-    console.log(this.state.rounds)
+    const rounds = this.state.rounds
     return (
       <div className={this.constructor.displayName}>
         <h2>Homescreen</h2>
-        <Link to='/round/1'>Round 1</Link>
+        <RoundsList rounds={rounds}/>
       </div>
     )
   }
