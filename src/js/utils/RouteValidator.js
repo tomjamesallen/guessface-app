@@ -1,50 +1,52 @@
-import AppStore from '../stores/AppStore';
-import history from '../history';
+import AppStore from '../stores/AppStore'
+import history from '../history'
 
-export default function (rules) {
-  var transitionId = 0,
-      dataReady = AppStore.isDataReady(),
-      cachedTransitions = [];
+export default function(rules) {
+  var transitionId = 0
+  var dataReady = AppStore.isDataReady()
+  var cachedTransitions = []
 
   function handleStoresChanged() {
-    dataReady = AppStore.isDataReady();
-    retryCachedTransitions();
-  };
+    dataReady = AppStore.isDataReady()
+    retryCachedTransitions()
+  }
 
   function testRules(next) {
-    rules.forEach(rule => rule(next, history.replace));
-  };
+    rules.forEach((rule) => rule(next, history.replace))
+  }
 
   function retryCachedTransitions() {
-    if (!dataReady) return;
+    if (!dataReady) return
 
-    cachedTransitions.forEach(transition => {
+    cachedTransitions.forEach((transition) => {
       if (transition.transitionId === transitionId) {
-        testRules(transition.next);
+        testRules(transition.next)
       }
-    });
+    })
 
-    cachedTransitions = [];
-  };
+    cachedTransitions = []
+  }
 
-  AppStore.addChangeListener(handleStoresChanged);
+  AppStore.addChangeListener(handleStoresChanged)
 
   return {
     validator(next) {
-      transitionId ++;
-      const thisTransitionId = transitionId;
+      transitionId++
+      const thisTransitionId = transitionId
 
-      if (dataReady) testRules(next);
-      else cachedTransitions.push({
-        next,
-        transitionId: thisTransitionId
-      });
+      if (dataReady) testRules(next)
+      else {
+        cachedTransitions.push({
+          next,
+          transitionId: thisTransitionId
+        })
+      }
 
-      return true;
+      return true
     },
 
     destroy() {
-      AppStore.removeChangeListener(handleStoresChanged);
+      AppStore.removeChangeListener(handleStoresChanged)
     }
-  };
-};
+  }
+}

@@ -3,31 +3,32 @@ import Radium from 'radium'
 import { Link as LinkImport } from 'react-router'
 var Link = Radium(LinkImport)
 
-import AppConstants from '../constants/AppConstants'
 import ThemeColors from '../constants/ThemeColors'
 import SizingVars from '../constants/SizingVars'
 const borders = SizingVars.borders
 import AnimationConstants from '../constants/AnimationConstants'
 
-import { Rem, px } from '../helpers/units'
-const rem = Rem()
-
-var noop = function () {}
+import { px } from '../helpers/units'
 
 var Button = Radium(React.createClass({
 
   propTypes: {
     size: PropTypes.oneOf(['small', 'med', 'lrg']),
     onClick: PropTypes.func,
-    query: PropTypes.object
+    query: PropTypes.object,
+    style: PropTypes.node,
+    active: PropTypes.bool,
+    to: PropTypes.node,
+    children: PropTypes.node
   },
 
   getDefaultProps() {
     return {
       size: 'med',
-      onClick: function () {},
-      query: {}
-    };
+      onClick() {},
+      query: {},
+      style: {}
+    }
   },
 
   /**
@@ -35,9 +36,8 @@ var Button = Radium(React.createClass({
    * @return {object}
    */
   render() {
-
-    var hovering = Radium.getState(this.state, 'hoverTrigger', ':hover');
-    var depressed = Radium.getState(this.state, 'hoverTrigger', ':active') === 'viamousedown';
+    var hovering = Radium.getState(this.state, 'hoverTrigger', ':hover')
+    var depressed = Radium.getState(this.state, 'hoverTrigger', ':active') === 'viamousedown'
 
     var borderShared = {
       position: 'absolute',
@@ -47,15 +47,15 @@ var Button = Radium(React.createClass({
       borderTop: `${px(borders.sm)} solid ${ThemeColors.primary}`,
       borderBottom: `${px(borders.sm)} solid ${ThemeColors.primary}`,
       zIndex: '3'
-    };
+    }
 
     var fontSizes = {
       small: SizingVars.type.p,
       med: SizingVars.type.h3,
       lrg: SizingVars.type.h2
-    };
+    }
 
-    var fontSize = fontSizes[this.props.size];
+    var fontSize = fontSizes[this.props.size]
 
     var styles = {
       base: [
@@ -82,20 +82,20 @@ var Button = Radium(React.createClass({
         left: 0,
         zIndex: 100,
         ':hover': {},
-        ':active': {},
+        ':active': {}
       },
       __leftBorder: [
         borderShared,
         {
           left: 0,
-          borderLeft: `${px(borders.med)} solid ${ThemeColors.primary}`,
+          borderLeft: `${px(borders.med)} solid ${ThemeColors.primary}`
         }
       ],
       __rightBorder: [
         borderShared,
         {
           right: 0,
-          borderRight: `${px(borders.med)} solid ${ThemeColors.primary}`,
+          borderRight: `${px(borders.med)} solid ${ThemeColors.primary}`
         }
       ],
       __background: [
@@ -115,7 +115,7 @@ var Button = Radium(React.createClass({
         (depressed || this.props.active) && {
           height: '100%',
           backgroundColor: 'inherit'
-        },
+        }
       ],
       _hover__background: {
         height: '100%'
@@ -124,7 +124,7 @@ var Button = Radium(React.createClass({
         position: 'relative',
         zIndex: '5'
       }
-    };
+    }
 
     if (this.props.to) {
       return (
@@ -132,7 +132,7 @@ var Button = Radium(React.createClass({
           style={styles.base}
           to={this.props.to}
           className={this.constructor.displayName}>
-          <span key="hoverTrigger" style={styles.__hoverTrigger}/>
+          <span key='hoverTrigger' style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>
           <span style={styles.__background}/>
@@ -140,7 +140,7 @@ var Button = Radium(React.createClass({
             {this.props.children}
           </span>
         </Link>
-      );
+      )
     }
     else {
       return (
@@ -148,7 +148,7 @@ var Button = Radium(React.createClass({
           style={styles.base}
           onClick={this.props.onClick}
           className={this.constructor.displayName}>
-          <span key="hoverTrigger" style={styles.__hoverTrigger}/>
+          <span key='hoverTrigger' style={styles.__hoverTrigger}/>
           <span style={styles.__leftBorder}/>
           <span style={styles.__rightBorder}/>
           <span style={styles.__background}/>
@@ -156,10 +156,10 @@ var Button = Radium(React.createClass({
             {this.props.children}
           </span>
         </button>
-      );
+      )
     }
   }
 
-}));
+}))
 
-export default Button;
+export default Button

@@ -1,22 +1,21 @@
 // App imports.
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import EventEmitter from 'events';
-import history from '../history';
+import AppDispatcher from '../dispatcher/AppDispatcher'
+import EventEmitter from 'events'
 
 // Helpers.
-import assign from 'object-assign';
+import assign from 'object-assign'
 
 // Constants.
-const CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change'
 
 function getInitialState() {
   return {
     route: {}
-  };
-};
+  }
+}
 
 // Create state var and set to initial state.
-var state = getInitialState();
+var state = getInitialState()
 
 /**
  * Update the current route.
@@ -42,43 +41,42 @@ var RouteStore = assign({}, EventEmitter.prototype, {
    * @return {object}
    */
   getRoute() {
-    return state.route;
+    return state.route
   },
 
   /**
    * Used in the functions above to trigger an update to the UI.
    */
   emitChange() {
-    this.emit(CHANGE_EVENT);
+    this.emit(CHANGE_EVENT)
   },
 
   /**
    * @param {function} callback
    */
   addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
+    this.on(CHANGE_EVENT, callback)
   },
 
   /**
    * @param {function} callback
    */
   removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
+    this.removeListener(CHANGE_EVENT, callback)
   }
-});
+})
 
 /**
  * Register callback to handle all updates.
  */
-RouteStore.dispatchToken = AppDispatcher.register(action => {
-
-  switch(action.actionType) {
+RouteStore.dispatchToken = AppDispatcher.register((action) => {
+  switch (action.actionType) {
     case 'onRouteUpdated':
-      onRouteUpdated(action.location, action.params);
-      break;
+      onRouteUpdated(action.location, action.params)
+      break
 
     default:
   }
-});
+})
 
-export default RouteStore;
+export default RouteStore

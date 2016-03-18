@@ -1,16 +1,15 @@
-import transitionManager from '../transitionManager';
+import transitionManager from '../transitionManager'
 
-export default function (transitionHook) {
-
-  var _transitionHookId = null;
+export default function(transitionHook) {
+  var _transitionHookId = null
 
   return {
     componentDidMount() {
-      _transitionHookId = transitionManager.registerHook(transitionHook);
+      _transitionHookId = transitionManager.registerHook(transitionHook)
     },
 
     componentWillUnmount() {
-      transitionManager.unregisterHook(_transitionHookId);
+      transitionManager.unregisterHook(_transitionHookId)
     }
-  };
-};
+  }
+}
