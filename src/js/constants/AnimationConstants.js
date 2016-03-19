@@ -1,4 +1,7 @@
 export default {
   short: '200ms',
-  easing: 'cubic-bezier(0.770, 0.000, 0.175, 1.000)'
+  med: '400ms',
+  medLong: '600ms',
+  long: '800ms',
+  easing: 'ease'
 }

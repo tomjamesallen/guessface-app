@@ -15,6 +15,7 @@ import u from '../helpers/unit'
 import BT from '../constants/BaseTypeStyles'
 import Color from 'color'
 import Colors from '../constants/ThemeColors'
+import AnimationConstants from '../constants/AnimationConstants'
 
 import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
@@ -64,7 +65,9 @@ var Question = Radium(React.createClass({
     return {
       imgsReady: false,
       componentHeight: null,
-      componentWidth: null
+      componentWidth: null,
+      questionState: 'load'
+      // 'ready' / 'question' / 'answer-stage-1' / 'answer-stage-2' / 'complete'
     }
   },
 
@@ -114,6 +117,37 @@ var Question = Radium(React.createClass({
     this._getSaveComponentHeight()
   },
 
+  _handlerLoad() {
+    this.setState({
+      questionState: 'load'
+    })
+  },
+  _handlerReady() {
+    this.setState({
+      questionState: 'ready'
+    })
+  },
+  _handlerQuestion() {
+    this.setState({
+      questionState: 'question'
+    })
+  },
+  _handlerAnswerStage1() {
+    this.setState({
+      questionState: 'answer-stage-1'
+    })
+  },
+  _handlerAnswerStage2() {
+    this.setState({
+      questionState: 'answer-stage-2'
+    })
+  },
+  _handlerComplete() {
+    this.setState({
+      questionState: 'complete'
+    })
+  },
+
   /**
    * Render the App component.
    * @return {object}
@@ -143,14 +177,16 @@ var Question = Radium(React.createClass({
         margin: '0 auto',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        transition: `all ${AnimationConstants.medLong} ${AnimationConstants.easing}`
       },
       imgWrapper: {
         base: {
           width: '50%',
           paddingBottom: `calc(50% - ${u(SizingVars.unit * 0.75)})`,
           position: 'relative',
-          boxShadow: `1px 1px 1px 0 ${Color(Colors.primary).clearer(0.7).rgbString()}`
+          boxShadow: `1px 1px 1px 0 ${Color(Colors.primary).clearer(0.7).rgbString()}`,
+          transition: `all ${AnimationConstants.medLong} ${AnimationConstants.easing}`
         },
         a: {
           marginRight: u(SizingVars.unit * 0.75)
@@ -171,16 +207,54 @@ var Question = Radium(React.createClass({
           width: `calc(100% - ${u(SizingVars.unit)})`,
           height: `calc(100% - ${u(SizingVars.unit)})`,
           top: u(SizingVars.unit / 2),
-          left: u(SizingVars.unit / 2)
+          left: u(SizingVars.unit / 2),
+          transition: `all ${AnimationConstants.long} ${AnimationConstants.easing}`
         },
         a: {
-
+          opacity: 0
         },
         b: {
-
+          opacity: 0
         },
         mix: {
-
+          opacity: 0
+        },
+        logo: {
+          backgroundImage: 'url(/imgs/Logo-inner.svg)',
+          backgroundSize: '75%',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }
+      },
+      responsiveImgComponent: {},
+      bracket: {
+        base: {
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          zIndex: 10,
+          transition: `all ${AnimationConstants.medLong} ${AnimationConstants.easing}`
+        },
+        left: {
+          left: 0
+        },
+        right: {
+          right: 0
+        },
+        base__inner: {
+          width: '20%',
+          height: '100%',
+          position: 'absolute',
+          borderTop: `${u(SizingVars.unit / 2)} solid ${Colors.primary}`,
+          borderBottom: `${u(SizingVars.unit / 2)} solid ${Colors.primary}`
+        },
+        left__inner: {
+          left: 0,
+          borderLeft: `${u(SizingVars.unit * 0.75)} solid ${Colors.primary}`
+        },
+        right__inner: {
+          right: 0,
+          borderRight: `${u(SizingVars.unit * 0.75)} solid ${Colors.primary}`
         }
       },
       infoWrapper: {
@@ -206,6 +280,46 @@ var Question = Radium(React.createClass({
       }
     }
 
+    switch (this.state.questionState) {
+      case 'load':
+        styles.imgsWrapper.transform = window.innerWidth ? `translateX(-${window.innerWidth}px)` : 'translateX(-200%)'
+        styles.imgWrapper.a.transform = `translateX(calc(50% + ${u(SizingVars.unit * 0.75)}))`
+        styles.imgWrapper.b.transform = `translateX(calc(-50% - ${u(SizingVars.unit * 0.75)}))`
+        break
+
+      case 'ready':
+        styles.imgWrapper.a.transform = `translateX(calc(50% + ${u(SizingVars.unit * 0.75)}))`
+        styles.imgWrapper.b.transform = `translateX(calc(-50% - ${u(SizingVars.unit * 0.75)}))`
+        break
+
+      case 'question':
+        styles.imgWrapper.a.transform = `translateX(calc(50% + ${u(SizingVars.unit * 0.75)}))`
+        styles.imgWrapper.b.transform = `translateX(calc(-50% - ${u(SizingVars.unit * 0.75)}))`
+        styles.img.mix.opacity = 1
+        break
+
+      case 'answer-stage-1':
+        styles.img.mix.opacity = 1
+        styles.img.a.opacity = 1
+        styles.img.b.opacity = 1
+        styles.bracket.left.transform = `translateX(calc(-100% - ${u(SizingVars.unit * 1.5)}))`
+        break
+
+      case 'answer-stage-2':
+        styles.img.mix.opacity = 1
+        styles.bracket.left.transform = `translateX(calc(-100% - ${u(SizingVars.unit * 1.5)}))`
+        break
+
+      case 'complete':
+        styles.imgsWrapper.transform = window.innerWidth ? `translateX(${window.innerWidth}px)` : 'translateX(-200%)'
+        styles.imgWrapper.a.transform = `translateX(calc(50% + ${u(SizingVars.unit * 0.75)}))`
+        styles.imgWrapper.b.transform = `translateX(calc(-50% - ${u(SizingVars.unit * 0.75)}))`
+        break
+
+      default:
+        break
+    }
+
     // Create image components.
     var imgs = {}
     const imgLabels = Object.keys(this.state.question.imgs)
@@ -215,10 +329,12 @@ var Question = Radium(React.createClass({
         srcs: img.srcs,
         aspectRatio: img.aspectRatio,
         onLoad: this._handleImgLoaded(label),
-        style: [styles.img.base, styles.img[label]]
+        style: styles.responsiveImgComponent
       }
       imgs[label] = (
-        <ResponsiveImage {...imgProps}/>
+        <div style={[styles.img.base, styles.img[label]]}>
+          <ResponsiveImage {...imgProps} className={label}/>
+        </div>
       )
     })
 
@@ -233,21 +349,35 @@ var Question = Radium(React.createClass({
         <div style={styles.imgsWrapper}>
           <div style={[styles.imgWrapper.base, styles.imgWrapper.a]}>
             <div style={styles.imgWrapperInner}>
-              <div />
-              {imgs.a}
+              <div style={[styles.img.base, styles.img.logo]}/>
               {imgs.mix}
+              {imgs.a}
             </div>
           </div>
           <div style={[styles.imgWrapper.base, styles.imgWrapper.b]}>
             <div style={styles.imgWrapperInner}>
-              <div />
-              {imgs.b}
+              <div style={[styles.img.base, styles.img.logo]}/>
               {imgs.mix}
+              {imgs.b}
+              <div style={[styles.bracket.base, styles.bracket.left]}>
+                <div style={[styles.bracket.base__inner, styles.bracket.left__inner]}/>
+              </div>
+              <div style={[styles.bracket.base, styles.bracket.right]}>
+                <div style={[styles.bracket.base__inner, styles.bracket.right__inner]}/>
+              </div>
             </div>
           </div>
         </div>
 
-        <div style={styles.buttonsWrapper}>{prevNext}</div>
+        <div style={styles.buttonsWrapper}>
+          {prevNext}
+          <button onClick={this._handlerLoad}>Load</button>
+          <button onClick={this._handlerReady}>Ready</button>
+          <button onClick={this._handlerQuestion}>Question</button>
+          <button onClick={this._handlerAnswerStage1}>Answer s1</button>
+          <button onClick={this._handlerAnswerStage2}>Answer s2</button>
+          <button onClick={this._handlerComplete}>Complete</button>
+        </div>
       </div>
     )
   }
