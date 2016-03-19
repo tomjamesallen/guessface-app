@@ -16,11 +16,14 @@ import BT from '../constants/BaseTypeStyles'
 import Color from 'color'
 import Colors from '../constants/ThemeColors'
 import AnimationConstants from '../constants/AnimationConstants'
+import whichTransitionEvent from '../helpers/whichTransitionEvent'
 
 import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
 import ResponsiveImageImport from './ResponsiveImage.react'
 const ResponsiveImage = Radium(ResponsiveImageImport)
+
+let ComponentRef
 
 function getState(props) {
   var _roundId = parseInt(props.roundId, 10) - 1
@@ -43,8 +46,17 @@ function getState(props) {
 }
 
 function transitionHook(call) {
-  return true
-  // setTimeout(call.resolve, 900);
+  let animationRef = ReactDOM.findDOMNode(ComponentRef.refs.imgsWrapper)
+  function onAnimationComplete() {
+    animationRef.removeEventListener(whichTransitionEvent(), onAnimationComplete)
+    call.resolve()
+  }
+  if (ComponentRef.state.questionState !== 'complete') {
+    animationRef.addEventListener(whichTransitionEvent(), onAnimationComplete)
+    ComponentRef.setState({
+      questionState: 'complete'
+    })
+  }
 }
 
 var Question = Radium(React.createClass({
@@ -66,8 +78,10 @@ var Question = Radium(React.createClass({
       imgsReady: false,
       componentHeight: null,
       componentWidth: null,
+
+      // 'load', 'ready', 'question', 'answer-stage-1', 'answer-stage-2',
+      // 'complete'
       questionState: 'load'
-      // 'ready' / 'question' / 'answer-stage-1' / 'answer-stage-2' / 'complete'
     }
   },
 
@@ -77,6 +91,10 @@ var Question = Radium(React.createClass({
     TransitionHook(transitionHook)
   ],
 
+  componentWillMount() {
+    ComponentRef = this
+  },
+
   componentWillReceiveProps(nextProps) {
     if (this.props.roundId !== nextProps.roundId ||
         this.props.questionId !== nextProps.questionId) {
@@ -84,6 +102,9 @@ var Question = Radium(React.createClass({
         imgsReady: false
       })
       callbackManager.reset()
+      this.setState({
+        questionState: 'load'
+      })
     }
   },
 
@@ -113,38 +134,42 @@ var Question = Radium(React.createClass({
     this._getSaveComponentHeight()
   },
 
-  componentDidUpdate(prevProps, prevState) {
-    this._getSaveComponentHeight()
+  componentWillUpdate(nextProps, nextState) {
+    var that = this
+    let animationRef = ReactDOM.findDOMNode(ComponentRef.refs.imgLeft)
+    function onAnimationComplete() {
+      animationRef.removeEventListener(whichTransitionEvent(), onAnimationComplete)
+      that.setState({
+        questionState: 'answer-stage-2'
+      })
+    }
+    if (nextState.questionState === 'answer-stage-1') {
+      animationRef.addEventListener(whichTransitionEvent(), onAnimationComplete)
+    }
   },
 
-  _handlerLoad() {
-    this.setState({
-      questionState: 'load'
-    })
-  },
-  _handlerReady() {
+  _setReadyState() {
     this.setState({
       questionState: 'ready'
     })
   },
-  _handlerQuestion() {
+
+  componentDidUpdate() {
+    this._getSaveComponentHeight()
+    if (this.state.questionState === 'load') {
+      setTimeout(this._setReadyState, 10)
+    }
+  },
+
+  _gotoQuestion() {
     this.setState({
       questionState: 'question'
     })
   },
-  _handlerAnswerStage1() {
+
+  _gotoAnswer() {
     this.setState({
       questionState: 'answer-stage-1'
-    })
-  },
-  _handlerAnswerStage2() {
-    this.setState({
-      questionState: 'answer-stage-2'
-    })
-  },
-  _handlerComplete() {
-    this.setState({
-      questionState: 'complete'
     })
   },
 
@@ -227,6 +252,19 @@ var Question = Radium(React.createClass({
         }
       },
       responsiveImgComponent: {},
+      label: [
+        BT.p,
+        {
+          position: 'absolute',
+          bottom: u(-SizingVars.unit * 2),
+          marginBottom: 0,
+          width: '100%',
+          display: 'block',
+          textAlign: 'center',
+          opacity: 0,
+          transition: `all ${AnimationConstants.long} ${AnimationConstants.easing}`
+        }
+      ],
       bracket: {
         base: {
           position: 'absolute',
@@ -283,6 +321,7 @@ var Question = Radium(React.createClass({
     switch (this.state.questionState) {
       case 'load':
         styles.imgsWrapper.transform = window.innerWidth ? `translateX(-${window.innerWidth}px)` : 'translateX(-200%)'
+        styles.imgsWrapper.transition = 'none'
         styles.imgWrapper.a.transform = `translateX(calc(50% + ${u(SizingVars.unit * 0.75)}))`
         styles.imgWrapper.b.transform = `translateX(calc(-50% - ${u(SizingVars.unit * 0.75)}))`
         break
@@ -300,13 +339,16 @@ var Question = Radium(React.createClass({
 
       case 'answer-stage-1':
         styles.img.mix.opacity = 1
-        styles.img.a.opacity = 1
-        styles.img.b.opacity = 1
         styles.bracket.left.transform = `translateX(calc(-100% - ${u(SizingVars.unit * 1.5)}))`
         break
 
       case 'answer-stage-2':
         styles.img.mix.opacity = 1
+        styles.img.a.opacity = 1
+        styles.img.b.opacity = 1
+        styles.label.push({
+          opacity: 1
+        })
         styles.bracket.left.transform = `translateX(calc(-100% - ${u(SizingVars.unit * 1.5)}))`
         break
 
@@ -338,21 +380,20 @@ var Question = Radium(React.createClass({
       )
     })
 
+    console.log(this.state)
+
     return (
       <div className={this.constructor.displayName} style={styles.base} ref='component'>
-        <div style={styles.infoWrapper}>
-          <h2 style={BT.h2}>Question: {this.state.question.questionId}</h2>
-          <p style={BT.p}>{this.state.imgsReady ? 'Images ready' : 'Images loading'}</p>
-          <p>{this.state.question.extra ? this.state.question.extra : null}</p>
-        </div>
+        <div style={styles.infoWrapper}/>
 
-        <div style={styles.imgsWrapper}>
-          <div style={[styles.imgWrapper.base, styles.imgWrapper.a]}>
+        <div style={styles.imgsWrapper} ref='imgsWrapper'>
+          <div style={[styles.imgWrapper.base, styles.imgWrapper.a]} ref='imgLeft'>
             <div style={styles.imgWrapperInner}>
               <div style={[styles.img.base, styles.img.logo]}/>
               {imgs.mix}
               {imgs.a}
             </div>
+            <div style={styles.label}>{this.state.question.a}</div>
           </div>
           <div style={[styles.imgWrapper.base, styles.imgWrapper.b]}>
             <div style={styles.imgWrapperInner}>
@@ -366,17 +407,14 @@ var Question = Radium(React.createClass({
                 <div style={[styles.bracket.base__inner, styles.bracket.right__inner]}/>
               </div>
             </div>
+            <div style={styles.label}>{this.state.question.b}</div>
           </div>
         </div>
 
         <div style={styles.buttonsWrapper}>
           {prevNext}
-          <button onClick={this._handlerLoad}>Load</button>
-          <button onClick={this._handlerReady}>Ready</button>
-          <button onClick={this._handlerQuestion}>Question</button>
-          <button onClick={this._handlerAnswerStage1}>Answer s1</button>
-          <button onClick={this._handlerAnswerStage2}>Answer s2</button>
-          <button onClick={this._handlerComplete}>Complete</button>
+          <button onClick={this._gotoQuestion}>Question</button>
+          <button onClick={this._gotoAnswer}>Answer</button>
         </div>
       </div>
     )
