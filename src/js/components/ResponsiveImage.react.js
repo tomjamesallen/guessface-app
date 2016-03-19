@@ -151,7 +151,7 @@ var ResponsiveImage = React.createClass({
    */
   render() {
     let wrapperProps = {
-      className: `${this.constructor.displayName} ${this.props.className}`,
+      className: `${this.constructor.displayName}${this.props.className ? ' ' + this.props.className : ''}`,
       style: this.props.style
     }
 

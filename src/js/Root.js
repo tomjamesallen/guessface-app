@@ -9,7 +9,6 @@ import HomeScreen from './components/HomeScreen.react'
 import RoundContainer from './components/RoundContainer.react'
 import RoundHome from './components/RoundHome.react'
 import QuestionContainer from './components/QuestionContainer.react'
-import ExampleContainer from './components/ExampleContainer.react'
 
 import AppStore from './stores/AppStore'
 import RouteValidator from './utils/RouteValidator'
@@ -85,7 +84,6 @@ export default class Root extends Component {
           <Redirect from='round' to='/' />
           <Route path='round/:roundId' component={RoundContainer} onEnter={onRouteEvent}>
             <IndexRoute component={RoundHome} onEnter={onRouteEvent}/>
-            <Route path='example' component={ExampleContainer} onEnter={onRouteEvent}/>
             <Route path=':questionId' component={QuestionContainer} onEnter={onRouteEvent}/>
           </Route>
         </Route>

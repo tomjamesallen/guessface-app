@@ -1,4 +1,7 @@
+/* global getComputedStyle */
+
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import Radium from 'radium'
 import AppStore from '../stores/AppStore'
 import LoadingScreen from './LoadingScreen.react'
@@ -7,6 +10,11 @@ import TransitionHook from '../mixins/TransitionHook'
 import ConnectToStores from '../mixins/ConnectToStores'
 import CallbackManager from '../utils/CallbackManager'
 const callbackManager = CallbackManager()
+import SizingVars from '../constants/SizingVars'
+import u from '../helpers/unit'
+import BT from '../constants/BaseTypeStyles'
+import Color from 'color'
+import Colors from '../constants/ThemeColors'
 
 import Button from './Button.react'
 import PrevNext from './PrevNextButtons.react'
@@ -42,13 +50,21 @@ var Question = Radium(React.createClass({
 
   propTypes: {
     roundId: PropTypes.string,
-    questionId: PropTypes.string
+    questionId: PropTypes.string,
+    initialComponentWidth: PropTypes.number
+  },
+
+  getDefaultProps() {
+    return {
+      initialComponentWidth: null
+    }
   },
 
   getInitialState() {
     return {
       imgsReady: false,
-      test: true
+      componentHeight: null,
+      componentWidth: null
     }
   },
 
@@ -79,10 +95,23 @@ var Question = Radium(React.createClass({
     }
   },
 
-  _handleClick() {
-    this.setState({
-      test: !this.state.test
-    })
+  _getSaveComponentHeight() {
+    var component = ReactDOM.findDOMNode(this.refs.component)
+    if (!getComputedStyle) return
+    var height = parseFloat(getComputedStyle(component).height)
+    if (height !== this.state.componentHeight) {
+      this.setState({
+        componentHeight: height
+      })
+    }
+  },
+
+  componentDidMount() {
+    this._getSaveComponentHeight()
+  },
+
+  componentDidUpdate(prevProps, prevState) {
+    this._getSaveComponentHeight()
   },
 
   /**
@@ -102,15 +131,91 @@ var Question = Radium(React.createClass({
       prevNext = <PrevNext />
     }
 
+    // Styling.
+    var styles = {
+      base: {
+        width: '100%',
+        height: '100%'
+      },
+      imgsWrapper: {
+        width: '100%',
+        height: '100%',
+        margin: '0 auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      imgWrapper: {
+        base: {
+          width: '50%',
+          paddingBottom: `calc(50% - ${u(SizingVars.unit * 0.75)})`,
+          position: 'relative',
+          boxShadow: `1px 1px 1px 0 ${Color(Colors.primary).clearer(0.7).rgbString()}`
+        },
+        a: {
+          marginRight: u(SizingVars.unit * 0.75)
+        },
+        b: {
+          marginLeft: u(SizingVars.unit * 0.75)
+        }
+      },
+      imgWrapperInner: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        backgroundColor: Colors.secondary
+      },
+      img: {
+        base: {
+          position: 'absolute',
+          width: `calc(100% - ${u(SizingVars.unit)})`,
+          height: `calc(100% - ${u(SizingVars.unit)})`,
+          top: u(SizingVars.unit / 2),
+          left: u(SizingVars.unit / 2)
+        },
+        a: {
+
+        },
+        b: {
+
+        },
+        mix: {
+
+        }
+      },
+      infoWrapper: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 200
+      },
+      buttonsWrapper: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        zIndex: 200
+      }
+    }
+
+    // Dynamically adjust styles.
+    if (this.state.componentWidth && this.state.componentHeight) {
+      let componentAspect = this.state.componentHeight / this.state.componentWidth
+      let requiredAspect = 0.5
+      if (componentAspect <= requiredAspect) {
+        styles.imgsWrapper.width = `${componentAspect / requiredAspect * 100}%`
+      }
+    }
+
+    // Create image components.
     var imgs = {}
     const imgLabels = Object.keys(this.state.question.imgs)
-
     imgLabels.forEach((label) => {
       let img = this.state.question.imgs[label]
       let imgProps = {
         srcs: img.srcs,
         aspectRatio: img.aspectRatio,
-        onLoad: this._handleImgLoaded(label)
+        onLoad: this._handleImgLoaded(label),
+        style: [styles.img.base, styles.img[label]]
       }
       imgs[label] = (
         <ResponsiveImage {...imgProps}/>
@@ -118,18 +223,31 @@ var Question = Radium(React.createClass({
     })
 
     return (
-      <div className={this.constructor.displayName}>
-        Round: {this.state.round.title} | Question: {this.state.question.questionId}
+      <div className={this.constructor.displayName} style={styles.base} ref='component'>
+        <div style={styles.infoWrapper}>
+          <h2 style={BT.h2}>Question: {this.state.question.questionId}</h2>
+          <p style={BT.p}>{this.state.imgsReady ? 'Images ready' : 'Images loading'}</p>
+          <p>{this.state.question.extra ? this.state.question.extra : null}</p>
+        </div>
 
-        {imgs.a}
-        {imgs.mix}
-        {imgs.b}
+        <div style={styles.imgsWrapper}>
+          <div style={[styles.imgWrapper.base, styles.imgWrapper.a]}>
+            <div style={styles.imgWrapperInner}>
+              <div />
+              {imgs.a}
+              {imgs.mix}
+            </div>
+          </div>
+          <div style={[styles.imgWrapper.base, styles.imgWrapper.b]}>
+            <div style={styles.imgWrapperInner}>
+              <div />
+              {imgs.b}
+              {imgs.mix}
+            </div>
+          </div>
+        </div>
 
-        <button onClick={this._handleClick}>{this.state.test ? 'toggle on' : 'toggle off'}</button>
-
-        <br/>
-        {prevNext}
-        {this.state.question.extra ? this.state.question.extra : null}
+        <div style={styles.buttonsWrapper}>{prevNext}</div>
       </div>
     )
   }
