@@ -4,7 +4,7 @@ import Radium from 'radium'
 import Button from './Button.react'
 
 import SizingVars from '../constants/SizingVars'
-const rem = require('../helpers/units').Rem()
+import u from '../helpers/unit'
 
 // Create About component.
 export default Radium(React.createClass({
@@ -17,8 +17,8 @@ export default Radium(React.createClass({
     function onClick() {}
 
     var buttonTestStyles = {
-      marginRight: rem(SizingVars.unit),
-      marginTop: rem(SizingVars.unit)
+      marginRight: u(SizingVars.unit),
+      marginTop: u(SizingVars.unit)
     }
 
     return (

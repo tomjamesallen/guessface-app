@@ -4,7 +4,7 @@ import AppStore from '../stores/AppStore'
 import LoadingScreen from './LoadingScreen.react'
 import ConnectToStores from '../mixins/ConnectToStores'
 import SizingVars from '../constants/SizingVars'
-const rem = require('../helpers/units').Rem()
+import u from '../helpers/unit'
 
 function getState(props) {
   var _roundId = parseInt(props.params.roundId, 10) - 1
@@ -43,8 +43,8 @@ var RoundContainer = Radium(React.createClass({
       },
       roundLabel: {
         position: 'absolute',
-        top: rem(SizingVars.unit * 1.5),
-        right: rem(SizingVars.unit * 1.5)
+        top: u(SizingVars.unit * 1.5),
+        right: u(SizingVars.unit * 1.5)
       }
     }
 

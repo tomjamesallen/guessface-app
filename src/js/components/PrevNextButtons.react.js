@@ -3,7 +3,7 @@ import Radium from 'radium'
 import AppStore from '../stores/AppStore'
 import RouteStore from '../stores/RouteStore'
 import SizingVars from '../constants/SizingVars'
-const rem = require('../helpers/units').Rem()
+import u from '../helpers/unit'
 import Button from './Button.react'
 import ConnectToStores from '../mixins/ConnectToStores'
 
@@ -47,7 +47,7 @@ var PrevNextButtons = Radium(React.createClass({
     var prevQuestionPath
     var prevButtonStyle = [
       sharedStyle, {
-        marginRight: rem(SizingVars.unit / 2)
+        marginRight: u(SizingVars.unit / 2)
       }
     ]
 

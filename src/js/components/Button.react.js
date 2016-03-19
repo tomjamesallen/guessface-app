@@ -8,8 +8,6 @@ import SizingVars from '../constants/SizingVars'
 const borders = SizingVars.borders
 import AnimationConstants from '../constants/AnimationConstants'
 
-import { px } from '../helpers/units'
-
 var Button = Radium(React.createClass({
 
   propTypes: {
@@ -47,8 +45,8 @@ var Button = Radium(React.createClass({
       width: '0.5em',
       top: 0,
       height: '100%',
-      borderTop: `${px(borders.sm)} solid ${ThemeColors.primary}`,
-      borderBottom: `${px(borders.sm)} solid ${ThemeColors.primary}`,
+      borderTop: `${borders.sm}px solid ${ThemeColors.primary}`,
+      borderBottom: `${borders.sm}px solid ${ThemeColors.primary}`,
       zIndex: '3'
     }
 
@@ -91,14 +89,14 @@ var Button = Radium(React.createClass({
         borderShared,
         {
           left: 0,
-          borderLeft: `${px(borders.med)} solid ${ThemeColors.primary}`
+          borderLeft: `${borders.med}px solid ${ThemeColors.primary}`
         }
       ],
       __rightBorder: [
         borderShared,
         {
           right: 0,
-          borderRight: `${px(borders.med)} solid ${ThemeColors.primary}`
+          borderRight: `${borders.med}px solid ${ThemeColors.primary}`
         }
       ],
       __background: [
