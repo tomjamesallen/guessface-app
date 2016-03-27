@@ -25,6 +25,64 @@ const ResponsiveImage = Radium(ResponsiveImageImport)
 
 let ComponentRef
 
+function noop() {}
+
+function addRemoveListener(el, callback = noop) {
+  function listener() {
+    el.removeEventListener(whichTransitionEvent(), listener)
+    callback(el)
+  }
+  el.addEventListener(whichTransitionEvent(), listener)
+}
+
+let lastRequestionState
+function updateQuestionState(targetState, callback = noop) {
+  if (!ComponentRef) return
+  let el
+
+  if (targetState !== 'answer-stage-2' &&
+      lastRequestionState === 'answer-stage-1') {
+    return
+  }
+
+  lastRequestionState = targetState
+
+  ComponentRef.setState({
+    questionStateTarget: targetState
+  })
+
+  if (targetState === 'ready' ||
+      targetState === 'complete') {
+    el = ReactDOM.findDOMNode(ComponentRef.refs.imgsWrapper)
+  }
+  else if (targetState === 'question' ||
+           targetState === 'answer-stage-1' ||
+           targetState === 'answer-stage-2') {
+    el = ReactDOM.findDOMNode(ComponentRef.refs.imgWrapper)
+  }
+
+  function onTransitionComplete() {
+    ComponentRef.setState({
+      questionStateCurrent: targetState
+    })
+    if (targetState === 'answer-stage-1') {
+      updateQuestionState('answer-stage-2', callback)
+    }
+    else {
+      callback(el, targetState)
+    }
+  }
+
+  if (el) {
+    addRemoveListener(el, () => {
+      onTransitionComplete()
+    })
+  }
+  else {
+    onTransitionComplete()
+  }
+}
+
 function getState(props) {
   var _roundId = parseInt(props.roundId, 10) - 1
   var _questionId = props.questionId
@@ -41,21 +99,20 @@ function getState(props) {
     question,
     dataReady,
     roundId,
-    questionId
+    questionId,
+    questionStateCurrent: 'load',
+    questionStateTarget: 'load'
   }
 }
 
 function transitionHook(call) {
-  let animationRef = ReactDOM.findDOMNode(ComponentRef.refs.imgsWrapper)
-  function onAnimationComplete() {
-    animationRef.removeEventListener(whichTransitionEvent(), onAnimationComplete)
-    call.resolve()
-  }
-  if (ComponentRef.state.questionState !== 'complete') {
-    animationRef.addEventListener(whichTransitionEvent(), onAnimationComplete)
-    ComponentRef.setState({
-      questionState: 'complete'
+  if (ComponentRef.state.questionStateCurrent !== 'complete') {
+    updateQuestionState('complete', () => {
+      call.resolve()
     })
+  }
+  else {
+    call.resolve()
   }
 }
 
@@ -70,18 +127,6 @@ var Question = Radium(React.createClass({
   getDefaultProps() {
     return {
       initialComponentWidth: null
-    }
-  },
-
-  getInitialState() {
-    return {
-      imgsReady: false,
-      componentHeight: null,
-      componentWidth: null,
-
-      // 'load', 'ready', 'question', 'answer-stage-1', 'answer-stage-2',
-      // 'complete'
-      questionState: 'load'
     }
   },
 
@@ -102,9 +147,10 @@ var Question = Radium(React.createClass({
         imgsReady: false
       })
       callbackManager.reset()
-      this.setState({
-        questionState: 'load'
-      })
+      updateQuestionState('load')
+      setTimeout(() => {
+        updateQuestionState('ready')
+      }, 1)
     }
   },
 
@@ -132,45 +178,19 @@ var Question = Radium(React.createClass({
 
   componentDidMount() {
     this._getSaveComponentHeight()
+    updateQuestionState('ready')
   },
 
-  componentWillUpdate(nextProps, nextState) {
-    var that = this
-    let animationRef = ReactDOM.findDOMNode(ComponentRef.refs.imgLeft)
-    function onAnimationComplete() {
-      animationRef.removeEventListener(whichTransitionEvent(), onAnimationComplete)
-      that.setState({
-        questionState: 'answer-stage-2'
-      })
-    }
-    if (nextState.questionState === 'answer-stage-1') {
-      animationRef.addEventListener(whichTransitionEvent(), onAnimationComplete)
-    }
-  },
-
-  _setReadyState() {
-    this.setState({
-      questionState: 'ready'
-    })
-  },
+  componentWillUpdate(nextProps, nextState) {},
 
   componentDidUpdate() {
     this._getSaveComponentHeight()
-    if (this.state.questionState === 'load') {
-      setTimeout(this._setReadyState, 10)
+  },
+
+  _goto(state) {
+    return () => {
+      updateQuestionState(state)
     }
-  },
-
-  _gotoQuestion() {
-    this.setState({
-      questionState: 'question'
-    })
-  },
-
-  _gotoAnswer() {
-    this.setState({
-      questionState: 'answer-stage-1'
-    })
   },
 
   /**
@@ -318,7 +338,7 @@ var Question = Radium(React.createClass({
       }
     }
 
-    switch (this.state.questionState) {
+    switch (this.state.questionStateTarget) {
       case 'load':
         styles.imgsWrapper.transform = window.innerWidth ? `translateX(-${window.innerWidth}px)` : 'translateX(-200%)'
         styles.imgsWrapper.transition = 'none'
@@ -380,14 +400,14 @@ var Question = Radium(React.createClass({
       )
     })
 
-    console.log(this.state)
+    console.log('Render:', this.state.questionStateCurrent, this.state.questionStateTarget)
 
     return (
       <div className={this.constructor.displayName} style={styles.base} ref='component'>
         <div style={styles.infoWrapper}/>
 
         <div style={styles.imgsWrapper} ref='imgsWrapper'>
-          <div style={[styles.imgWrapper.base, styles.imgWrapper.a]} ref='imgLeft'>
+          <div style={[styles.imgWrapper.base, styles.imgWrapper.a]} ref='imgWrapper'>
             <div style={styles.imgWrapperInner}>
               <div style={[styles.img.base, styles.img.logo]}/>
               {imgs.mix}
@@ -413,8 +433,11 @@ var Question = Radium(React.createClass({
 
         <div style={styles.buttonsWrapper}>
           {prevNext}
-          <button onClick={this._gotoQuestion}>Question</button>
-          <button onClick={this._gotoAnswer}>Answer</button>
+          <button onClick={this._goto('load')}>load</button>
+          <button onClick={this._goto('ready')}>ready</button>
+          <button onClick={this._goto('question')}>Question</button>
+          <button onClick={this._goto('answer-stage-1')}>Answer</button>
+          <button onClick={this._goto('complete')}>complete</button>
         </div>
       </div>
     )
