@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import Radium from 'radium'
 import AppStore from '../stores/AppStore'
 import RouteStore from '../stores/RouteStore'
@@ -33,6 +33,10 @@ var PrevNextButtons = Radium(React.createClass({
   mixins: [
     ConnectToStores([AppStore, RouteStore], getState)
   ],
+
+  propTypes: {
+    disabled: PropTypes.bool
+  },
 
   /**
    * Render the App component.
