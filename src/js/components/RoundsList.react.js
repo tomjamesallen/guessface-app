@@ -16,7 +16,7 @@ var RoundsList = Radium(React.createClass({
   render() {
     let roundsDisplayArray = this.props.rounds.map((round, i) => {
       return (
-        <li style={BT.li} key={i}><Link style={BT.a} to={round.path}>{round.title}</Link></li>
+        <li style={BT.li} key={i}>[] <Link style={BT.a} to={round.path}>{round.title}</Link></li>
       )
     })
     let roundsDisplay = <ul style={BT.ul}>{roundsDisplayArray}</ul>

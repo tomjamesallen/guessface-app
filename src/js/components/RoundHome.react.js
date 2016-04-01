@@ -3,7 +3,7 @@ import Radium from 'radium'
 import AppStore from '../stores/AppStore'
 import RouteStore from '../stores/RouteStore'
 import ConnectToStores from '../mixins/ConnectToStores'
-import Type from '../constants/BaseTypeStyles'
+import BT from '../constants/BaseTypeStyles'
 import Button from './Button.react'
 
 function getState() {
@@ -31,7 +31,7 @@ var RoundHome = Radium(React.createClass({
     var description
     if (this.state.round.description) {
       description = (
-        <p style={Type.p}>{this.state.round.description}</p>
+        <p style={BT.p}>{this.state.round.description}</p>
       )
     }
 
@@ -41,9 +41,21 @@ var RoundHome = Radium(React.createClass({
       exampleButton = <Button to={examplePath}>example question</Button>
     }
 
+    const styles = {
+      base: {
+        textAlign: 'center',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        height: '100%',
+        width: '100%'
+      }
+    }
+
     return (
-      <div className={this.constructor.displayName}>
-        <h2 style={Type.h2}>{this.state.round.title}</h2>
+      <div className={this.constructor.displayName} style={styles.base}>
+        <h2 style={[BT.h3, BT.noMarginBottom]}>{this.state.round.title}</h2>
         {description}
         {exampleButton}
       </div>

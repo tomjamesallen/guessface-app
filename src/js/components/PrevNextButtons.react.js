@@ -35,7 +35,8 @@ var PrevNextButtons = Radium(React.createClass({
   ],
 
   propTypes: {
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    style: PropTypes.object
   },
 
   /**
@@ -44,7 +45,9 @@ var PrevNextButtons = Radium(React.createClass({
    */
   render() {
     // Shared button styles.
-    var sharedStyle = {}
+    var sharedStyle = [
+      this.props.style
+    ]
 
     // Prev button.
     var prevQuestionButton

@@ -136,6 +136,10 @@ var Question = Radium(React.createClass({
     initialComponentWidth: PropTypes.number
   },
 
+  contextTypes: {
+    router: PropTypes.object.isRequired
+  },
+
   getDefaultProps() {
     return {
       initialComponentWidth: null
@@ -188,6 +192,11 @@ var Question = Radium(React.createClass({
   componentDidMount() {
     this._getSaveComponentHeight()
     updateQuestionState('ready')
+    addEventListener('keypress', this._onKeyPress)
+  },
+
+  componentWillUnmount() {
+    removeEventListener('keypress', this._onKeyPress)
   },
 
   componentWillUpdate(nextProps, nextState) {},
@@ -202,6 +211,29 @@ var Question = Radium(React.createClass({
     }
   },
 
+  _onKeyPress(e) {
+    const currentState = this.state.questionStateTarget
+
+    if (currentState === 'ready') {
+      updateQuestionState('question')
+    }
+    if (currentState === 'question') {
+      updateQuestionState('answer-stage-1')
+    }
+    if (currentState === 'answer-stage-1' || currentState === 'answer-stage-2') {
+      if (this.state.questionId === 'e') {
+        let path = AppStore.getQuestionPath(this.state.roundId, 0)
+        this.context.router.push(path)
+      }
+      else {
+        let path = AppStore.getQuestionPath(this.state.roundId, this.state.questionId + 1)
+        if (path) {
+          this.context.router.push(path.pathname)
+        }
+      }
+    }
+  }, 
+
   /**
    * Render the App component.
    * @return {object}
@@ -209,15 +241,6 @@ var Question = Radium(React.createClass({
   render() {
     if (!this.state.dataReady) return <LoadingScreen/>
     if (!this.state.question) return <div>Question not found</div>
-
-    let prevNext
-    if (this.state.questionId === 'e') {
-      let path = AppStore.getQuestionPath(this.state.roundId, 0)
-      prevNext = <Button to={path}>start round</Button>
-    }
-    else {
-      prevNext = <PrevNext />
-    }
 
     // Styling.
     var styles = {
@@ -332,9 +355,15 @@ var Question = Radium(React.createClass({
       },
       buttonsWrapper: {
         position: 'absolute',
-        bottom: 0,
+        bottom: u(-SizingVars.unit * 3.5),
         left: 0,
         zIndex: 200
+      },
+      prevNext: {
+        display: 'inline-block'
+      },
+      button: {
+        display: 'inline-block'
       }
     }
 
@@ -391,6 +420,16 @@ var Question = Radium(React.createClass({
         break
     }
 
+    // Create prevNext buttons.
+    let prevNext
+    if (this.state.questionId === 'e') {
+      let path = AppStore.getQuestionPath(this.state.roundId, 0)
+      prevNext = <Button to={path}>start round</Button>
+    }
+    else {
+      prevNext = <PrevNext style={styles.prevNext}/>
+    }
+
     // Create image components.
     var imgs = {}
     const imgLabels = Object.keys(this.state.question.imgs)
@@ -440,8 +479,8 @@ var Question = Radium(React.createClass({
 
         <div style={styles.buttonsWrapper}>
           {prevNext}
-          <Button onClick={this._goto('question')}>Question</Button>
-          <Button onClick={this._goto('answer-stage-1')}>Answer</Button>
+          <Button style={styles.button} onClick={this._goto('question')}>Question</Button>
+          <Button style={styles.button} onClick={this._goto('answer-stage-1')}>Answer</Button>
         </div>
       </div>
     )

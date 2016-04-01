@@ -4,7 +4,9 @@ import AppStore from '../stores/AppStore'
 import LoadingScreen from './LoadingScreen.react'
 import ConnectToStores from '../mixins/ConnectToStores'
 import SizingVars from '../constants/SizingVars'
+import BT from '../constants/BaseTypeStyles'
 import u from '../helpers/unit'
+import { Link } from 'react-router'
 
 function getState(props) {
   var _roundId = parseInt(props.params.roundId, 10) - 1
@@ -36,21 +38,26 @@ var RoundContainer = Radium(React.createClass({
     if (!this.state.dataReady) return <LoadingScreen/>
     if (!this.state.round) return <div>Round not found</div>
 
-    var styles = {
+    const styles = {
       base: {
         height: '100%',
         width: '100%'
       },
-      roundLabel: {
-        position: 'absolute',
-        top: u(SizingVars.unit * 1.5),
-        right: u(SizingVars.unit * 1.5)
-      }
+      roundLabel: [
+        BT.h3,
+        BT.light,
+        {
+          position: 'absolute',
+          top: u(SizingVars.unit * 1.5),
+          right: u(SizingVars.unit * 1.5),
+          marginBottom: 0
+        }
+      ]
     }
 
     return (
       <div className={this.constructor.displayName} style={styles.base}>
-        <div style={styles.roundLabel}>{this.state.round.title}</div>
+        <h2 style={styles.roundLabel}>[] <Link to={this.state.round.path} style={BT.a}>{this.state.round.title}</Link></h2>
         {this.props.children ? React.cloneElement(this.props.children, {state: this.state}) : null}
       </div>
     )

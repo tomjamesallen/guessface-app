@@ -1,5 +1,6 @@
 import SizingVars from './SizingVars'
 import u from '../helpers/unit'
+import Colors from './ThemeColors'
 
 export default {
   h1: {
@@ -12,12 +13,14 @@ export default {
   },
   h3: {
     fontSize: u(SizingVars.type.h3),
-    marginBottom: u(SizingVars.type.p * 1.5)
+    marginBottom: u(SizingVars.type.p * 1.5),
+    fontWeight: 200
   },
   p: {
     fontSize: u(SizingVars.type.p),
     lineHeight: u(SizingVars.type.p * 1.5),
-    marginBottom: u(SizingVars.type.p * 1.5)
+    marginBottom: u(SizingVars.type.p * 1.5),
+    fontWeight: 200
   },
   ul: {
     fontSize: u(SizingVars.type.p),
@@ -27,9 +30,18 @@ export default {
   },
   li: {
     fontSize: u(SizingVars.type.p),
-    lineHeight: u(SizingVars.type.p * 1.5)
+    lineHeight: u(SizingVars.type.p * 1.5),
+    fontWeight: 200
   },
   a: {
-    color: 'inherit'
+    color: 'inherit',
+    textDecoration: 'none',
+    borderBottom: `2px solid ${Colors.secondary}`
+  },
+  light: {
+    fontWeight: 200
+  },
+  noMarginBottom: {
+    marginBottom: 0
   }
 }
