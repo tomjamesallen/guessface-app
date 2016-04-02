@@ -84,7 +84,8 @@ function updateQuestionState(targetState, callback = noop) {
   }
 }
 
-function getState(props, state) {
+function getState(props, that) {
+  var state = that ? that.state : {}
   var _roundId = parseInt(props.roundId, 10) - 1
   var _questionId = props.questionId
   if (_questionId !== 'e') _questionId = parseInt(_questionId, 10) - 1
@@ -94,8 +95,6 @@ function getState(props, state) {
   const dataReady = AppStore.isDataReady()
   const roundId = round ? round.roundId : null
   const questionId = question ? question.questionId : null
-
-  state = state || {}
 
   return {
     round,
@@ -192,11 +191,11 @@ var Question = Radium(React.createClass({
   componentDidMount() {
     this._getSaveComponentHeight()
     updateQuestionState('ready')
-    addEventListener('keypress', this._onKeyPress)
+    addEventListener('keydown', this._onKeyPress)
   },
 
   componentWillUnmount() {
-    removeEventListener('keypress', this._onKeyPress)
+    removeEventListener('keydown', this._onKeyPress)
   },
 
   componentWillUpdate(nextProps, nextState) {},
@@ -211,7 +210,7 @@ var Question = Radium(React.createClass({
     }
   },
 
-  _onKeyPress(e) {
+  _advanceState() {
     const currentState = this.state.questionStateTarget
 
     if (currentState === 'ready') {
@@ -221,16 +220,54 @@ var Question = Radium(React.createClass({
       updateQuestionState('answer-stage-1')
     }
     if (currentState === 'answer-stage-1' || currentState === 'answer-stage-2') {
-      if (this.state.questionId === 'e') {
-        let path = AppStore.getQuestionPath(this.state.roundId, 0)
-        this.context.router.push(path)
+      this._gotoNextQuestion()
+    }
+  },
+
+  _gotoPrevQuestion() {
+    if (this.state.questionId === 'e') {
+      console.log('go to prev round')
+    }
+    else if (this.state.questionId === 0) {
+      let path = AppStore.getQuestionPath(this.state.roundId, 'e')
+      this.context.router.push(path)
+    }
+    else {
+      let path = AppStore.getQuestionPath(this.state.roundId, this.state.questionId - 1)
+      if (path) {
+        this.context.router.push(path.pathname)
+      }
+    }
+  },
+
+  _gotoNextQuestion() {
+    if (this.state.questionId === 'e') {
+      let path = AppStore.getQuestionPath(this.state.roundId, 0)
+      this.context.router.push(path)
+    }
+    else {
+      let path = AppStore.getQuestionPath(this.state.roundId, this.state.questionId + 1)
+      if (path) {
+        this.context.router.push(path.pathname)
       }
       else {
-        let path = AppStore.getQuestionPath(this.state.roundId, this.state.questionId + 1)
+        let path = AppStore.getRoundPath(this.state.roundId + 1)
         if (path) {
           this.context.router.push(path.pathname)
         }
       }
+    }
+  },
+
+  _onKeyPress(e) {
+    if (e.which === 32) {
+      this._advanceState()
+    }
+    if (e.which === 37) {
+      this._gotoPrevQuestion()
+    }
+    if (e.which === 39) {
+      this._gotoNextQuestion()
     }
   }, 
 
@@ -355,15 +392,23 @@ var Question = Radium(React.createClass({
       },
       buttonsWrapper: {
         position: 'absolute',
+        width: '100%',
         bottom: u(-SizingVars.unit * 3.5),
         left: 0,
-        zIndex: 200
+        zIndex: 200,
+        display: 'flex',
+        justifyContent: 'space-between'
       },
       prevNext: {
-        display: 'inline-block'
+        display: 'inline-block',
+        marginRight: u(SizingVars.unit / 2)
+      },
+      stateButtonsWrapper: {
+        marginLeft: 'auto'
       },
       button: {
-        display: 'inline-block'
+        display: 'inline-block',
+        marginRight: u(SizingVars.unit / 2)
       }
     }
 
@@ -424,7 +469,12 @@ var Question = Radium(React.createClass({
     let prevNext
     if (this.state.questionId === 'e') {
       let path = AppStore.getQuestionPath(this.state.roundId, 0)
-      prevNext = <Button to={path}>start round</Button>
+      prevNext = (
+        <div>
+          <Button style={styles.prevNext} to={AppStore.getRoundPath(this.state.roundId)}>back</Button>
+          <Button style={styles.prevNext} to={path}>start round</Button>
+        </div>
+      )
     }
     else {
       prevNext = <PrevNext style={styles.prevNext}/>
@@ -479,8 +529,10 @@ var Question = Radium(React.createClass({
 
         <div style={styles.buttonsWrapper}>
           {prevNext}
-          <Button style={styles.button} onClick={this._goto('question')}>Question</Button>
-          <Button style={styles.button} onClick={this._goto('answer-stage-1')}>Answer</Button>
+          <div style={styles.stateButtonsWrapper}>
+            <Button style={styles.button} onClick={this._goto('question')}>question</Button>
+            <Button style={styles.button} onClick={this._goto('answer-stage-1')}>answer</Button>
+          </div>
         </div>
       </div>
     )

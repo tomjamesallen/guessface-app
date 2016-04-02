@@ -59,16 +59,24 @@ var PrevNextButtons = Radium(React.createClass({
     ]
 
     if (this.state.questionId !== 'e' && AppStore.getQuestion(this.state.roundId, this.state.questionId - 1)) {
-      prevQuestionPath = `/round/${this.state.roundId + 1}/${this.state.questionId}`
+      prevQuestionPath = AppStore.getQuestionPath(this.state.roundId, this.state.questionId - 1)
     }
 
     if (prevQuestionPath) {
       prevQuestionButton = <Button style={prevButtonStyle} to={prevQuestionPath}>prev</Button>
     }
+    else {
+      let path = AppStore.getQuestionPath(this.state.roundId, 'e')
+      if (path) {
+        prevQuestionButton = <Button style={prevButtonStyle} to={path}>back</Button>
+      }
+      
+    }
 
     // Next button.
     var nextQuestionButton
     var nextQuestionPath
+    var nextButtonText = 'next'
     var nextButtonStyle = [
       sharedStyle, {}
     ]
@@ -79,9 +87,13 @@ var PrevNextButtons = Radium(React.createClass({
     else if (AppStore.getQuestion(this.state.roundId, this.state.questionId + 1)) {
       nextQuestionPath = AppStore.getQuestionPath(this.state.roundId, this.state.questionId + 1).pathname
     }
+    else if (AppStore.getRoundPath(this.state.roundId + 1)) {
+      nextQuestionPath = AppStore.getRoundPath(this.state.roundId + 1)
+      nextButtonText = 'next round'
+    }
 
     if (nextQuestionPath) {
-      nextQuestionButton = <Button style={nextButtonStyle} to={nextQuestionPath}>next</Button>
+      nextQuestionButton = <Button style={nextButtonStyle} to={nextQuestionPath}>{nextButtonText}</Button>
     }
 
     // Output.

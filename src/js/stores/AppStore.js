@@ -11,9 +11,6 @@ import ActionTypes from '../constants/ActionTypes'
 import Api from '../constants/Api'
 const CHANGE_EVENT = 'change'
 
-// Stores.
-import RouteStore from './RouteStore'
-
 // Get ENV.
 // const ENV = process.env.NODE_ENV
 
@@ -67,13 +64,10 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
     if (typeof round === 'undefined') return
 
-    const route = RouteStore.getRoute()
-
     round.roundLength = round.questionsData.length
     round.hasExample = typeof round.exampleData === 'object'
     round.path = {
-      pathname: `/round/${round.roundId + 1}`,
-      query: route.location.query
+      pathname: `/round/${round.roundId + 1}`
     }
 
     if (returnFullData) {
@@ -100,7 +94,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
   getQuestion(roundId, questionId) {
     const round = this.getRound(roundId, true)
     if (!round) return
-    const route = RouteStore.getRoute()
     let question
 
     // Handle example question.
@@ -119,8 +112,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     if (typeof pathQuestionId === 'number') pathQuestionId++
 
     question.path = {
-      pathname: `/round/${pathRoundId}/${pathQuestionId}`,
-      query: route.location.query
+      pathname: `/round/${pathRoundId}/${pathQuestionId}`
     }
 
     return question
@@ -198,7 +190,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
  * Register callback to handle all updates.
  */
 AppDispatcher.register(function(action) {
-  AppDispatcher.waitFor([RouteStore.dispatchToken])
 
   switch (action.actionType) {
     case ActionTypes.INITIAL_DATA_FETCH:

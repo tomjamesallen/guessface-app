@@ -13,12 +13,26 @@ import Logo from './Logo.react'
 var App = Radium(React.createClass({
 
   propTypes: {
-    children: PropTypes.object
+    children: PropTypes.object,
+    location: PropTypes.object.isRequired,
+    params: PropTypes.object.isRequired
   },
 
   getDefaultProps() {
     return {
       initialComponentWidth: 720
+    }
+  },
+
+  childContextTypes: {
+    location: PropTypes.object,
+    params: PropTypes.object
+  },
+
+  getChildContext() {
+    return {
+      location: this.props.location,
+      params: this.props.params
     }
   },
 

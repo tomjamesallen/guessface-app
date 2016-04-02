@@ -4,6 +4,8 @@ import AppStore from '../stores/AppStore'
 import RouteStore from '../stores/RouteStore'
 import ConnectToStores from '../mixins/ConnectToStores'
 import BT from '../constants/BaseTypeStyles'
+import SizingVars from '../constants/SizingVars'
+import u from '../helpers/unit'
 import Button from './Button.react'
 
 function getState() {
@@ -50,6 +52,12 @@ var RoundHome = Radium(React.createClass({
         flexDirection: 'column',
         height: '100%',
         width: '100%'
+      },
+      buttonsWrapper: {
+        display: 'flex'
+      },
+      homeButton: {
+        marginRight: u(SizingVars.unit / 2)
       }
     }
 
@@ -57,7 +65,10 @@ var RoundHome = Radium(React.createClass({
       <div className={this.constructor.displayName} style={styles.base}>
         <h2 style={[BT.h3, BT.noMarginBottom]}>{this.state.round.title}</h2>
         {description}
-        {exampleButton}
+        <div style={styles.buttonsWrapper}>
+          <Button to='/' style={styles.homeButton}>home</Button>
+          {exampleButton}
+        </div>
       </div>
     )
   }

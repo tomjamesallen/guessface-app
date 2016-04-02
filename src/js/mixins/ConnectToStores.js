@@ -14,7 +14,7 @@ export default function(stores, getState) {
     },
 
     componentWillReceiveProps(nextProps) {
-      this.setState(getState(nextProps, this.state))
+      this.setState(getState(nextProps, this))
     },
 
     componentWillUnmount() {
@@ -24,7 +24,7 @@ export default function(stores, getState) {
     },
 
     handleStoresChanged() {
-      this.setState(getState(this.props, this.state))
+      this.setState(getState(this.props, this))
     }
   }
 }
