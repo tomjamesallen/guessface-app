@@ -1,4 +1,4 @@
-/* global getComputedStyle */
+/* global getComputedStyle, addEventListener, removeEventListener */
 
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
@@ -269,7 +269,7 @@ var Question = Radium(React.createClass({
     if (e.which === 39) {
       this._gotoNextQuestion()
     }
-  }, 
+  },
 
   /**
    * Render the App component.
@@ -409,7 +409,20 @@ var Question = Radium(React.createClass({
       button: {
         display: 'inline-block',
         marginRight: u(SizingVars.unit / 2)
-      }
+      },
+      extra: [
+        BT.h3,
+        {
+          position: 'absolute',
+          bottom: u(-SizingVars.unit * 2),
+          left: 0,
+          width: '100%',
+          textAlign: 'center',
+          marginBottom: 0,
+          transition: `all ${AnimationConstants.long} ${AnimationConstants.easing}`,
+          opacity: 0
+        }
+      ]
     }
 
     // Dynamically adjust styles.
@@ -453,6 +466,9 @@ var Question = Radium(React.createClass({
           opacity: 1
         })
         styles.bracket.left.transform = `translateX(calc(-100% - ${u(SizingVars.unit * 1.5)}))`
+        styles.extra.push({
+          opacity: 1
+        })
         break
 
       case 'complete':
@@ -526,6 +542,8 @@ var Question = Radium(React.createClass({
             <div style={styles.label}>{this.state.question.b}</div>
           </div>
         </div>
+
+        <div style={styles.extra}>{this.state.question.extra}</div>
 
         <div style={styles.buttonsWrapper}>
           {prevNext}
