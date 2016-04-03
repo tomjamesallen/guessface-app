@@ -57,7 +57,7 @@ var RoundContainer = Radium(React.createClass({
 
     return (
       <div className={this.constructor.displayName} style={styles.base}>
-        <h2 style={styles.roundLabel}><Link to={this.state.round.path} style={BT.a}>{this.state.round.title}</Link></h2>
+        <h2 style={styles.roundLabel}>{this.state.round.roundId + 1}: <Link to={this.state.round.path} style={BT.a}>{this.state.round.title}</Link></h2>
         {this.props.children ? React.cloneElement(this.props.children, {state: this.state}) : null}
       </div>
     )

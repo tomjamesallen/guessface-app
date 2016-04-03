@@ -129,6 +129,10 @@ function resetQuestionState() {
 
 var Question = Radium(React.createClass({
 
+  getInitialState() {
+    return {}
+  },
+
   propTypes: {
     roundId: PropTypes.string,
     questionId: PropTypes.string,
@@ -225,10 +229,7 @@ var Question = Radium(React.createClass({
   },
 
   _gotoPrevQuestion() {
-    if (this.state.questionId === 'e') {
-      console.log('go to prev round')
-    }
-    else if (this.state.questionId === 0) {
+    if (this.state.questionId === 0) {
       let path = AppStore.getQuestionPath(this.state.roundId, 'e')
       this.context.router.push(path)
     }
@@ -262,12 +263,15 @@ var Question = Radium(React.createClass({
   _onKeyPress(e) {
     if (e.which === 32) {
       this._advanceState()
+      e.preventDefault()
     }
     if (e.which === 37) {
       this._gotoPrevQuestion()
+      e.preventDefault()
     }
     if (e.which === 39) {
       this._gotoNextQuestion()
+      e.preventDefault()
     }
   },
 
@@ -414,7 +418,7 @@ var Question = Radium(React.createClass({
         BT.h3,
         {
           position: 'absolute',
-          bottom: u(-SizingVars.unit * 2),
+          bottom: u(-SizingVars.unit),
           left: 0,
           width: '100%',
           textAlign: 'center',
@@ -428,7 +432,7 @@ var Question = Radium(React.createClass({
     // Dynamically adjust styles.
     if (this.state.componentWidth && this.state.componentHeight) {
       let componentAspect = this.state.componentHeight / this.state.componentWidth
-      let requiredAspect = 0.5
+      let requiredAspect = 0.7
       if (componentAspect <= requiredAspect) {
         styles.imgsWrapper.width = `${componentAspect / requiredAspect * 100}%`
       }
@@ -541,9 +545,8 @@ var Question = Radium(React.createClass({
             </div>
             <div style={styles.label}>{this.state.question.b}</div>
           </div>
+          <div style={styles.extra}>{this.state.question.extra}</div>
         </div>
-
-        <div style={styles.extra}>{this.state.question.extra}</div>
 
         <div style={styles.buttonsWrapper}>
           {prevNext}

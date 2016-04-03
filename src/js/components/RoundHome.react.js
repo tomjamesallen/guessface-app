@@ -40,7 +40,7 @@ var RoundHome = Radium(React.createClass({
     var exampleButton
     var examplePath = AppStore.getQuestionPath(this.state.roundId, 'e')
     if (examplePath) {
-      exampleButton = <Button to={examplePath}>example question</Button>
+      exampleButton = <Button to={examplePath} size='small'>example question</Button>
     }
 
     const styles = {
@@ -66,7 +66,7 @@ var RoundHome = Radium(React.createClass({
         <h2 style={[BT.h3, BT.noMarginBottom]}>{this.state.round.title}</h2>
         {description}
         <div style={styles.buttonsWrapper}>
-          <Button to='/' style={styles.homeButton}>home</Button>
+          <Button to='/' size='small' style={styles.homeButton}>home</Button>
           {exampleButton}
         </div>
       </div>

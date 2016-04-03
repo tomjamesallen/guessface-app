@@ -1,0 +1,35 @@
+html, body, .content-wrapper {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "museo-sans-condensed",sans-serif;
+}
+
+// Scale base font sizing.
+// This will scale anything sized with EMs or REMs.
+html {
+
+  font-size: 14px;
+
+  @media (min-width: 400px) {
+    // font-size: 15px;
+  }   
+
+  @media (min-width: 600px) {
+    font-size: 16px;
+  } 
+
+  @media (min-width: 700px) {
+    // font-size: 20px;
+  } 
+}
+
+// Resets.
+h1, h2, h3, h4, h5, h6, p, li, ul {
+  margin: 0;
+  padding: 0;
+}

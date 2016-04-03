@@ -70,7 +70,6 @@ var PrevNextButtons = Radium(React.createClass({
       if (path) {
         prevQuestionButton = <Button style={prevButtonStyle} to={path}>back</Button>
       }
-      
     }
 
     // Next button.

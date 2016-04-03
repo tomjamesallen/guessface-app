@@ -36,7 +36,7 @@ var HomeScreen = Radium(React.createClass({
     return (
       <div className={this.constructor.displayName} style={styles.base}>
         <h2 style={[BT.h3, BT.noMarginBottom]}>Welcome to Guessface!</h2>
-        <p style={[BT.p]}>The face guessing game for all the family...</p>
+        <p style={[BT.p]}>The face guessing game for all the family... <br/>or at least those that like guessing faces.</p>
         <p style={[BT.p, BT.noMarginBottom]}>Select a round:</p>
         <RoundsList rounds={rounds}/>
       </div>

@@ -190,7 +190,6 @@ var AppStore = assign({}, EventEmitter.prototype, {
  * Register callback to handle all updates.
  */
 AppDispatcher.register(function(action) {
-
   switch (action.actionType) {
     case ActionTypes.INITIAL_DATA_FETCH:
       initialDataFetch()

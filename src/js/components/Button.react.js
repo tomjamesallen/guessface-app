@@ -70,7 +70,8 @@ var Button = Radium(React.createClass({
           padding: '0.2em 0.5em',
           textDecoration: 'none',
           color: ThemeColors.primary,
-          fontSize
+          fontSize,
+          fontWeight: 200
         },
         this.props.style
       ],
