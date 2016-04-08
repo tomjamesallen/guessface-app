@@ -1,4 +1,10 @@
 # Guessface App
 
 The front end for Guessface.
-This is currently a work in progress, and a rebuild of an older project.
+
+Hosted at [http://guessface.tomjamesallen.co.uk][guessface].
+
+Relies on the [Guessface api][guessface-api] to serve the question data.
+
+[guessface]: http://guessface.tomjamesallen.co.uk
+[guessface-api]: https://github.com/tomjamesallen/guessface-api
